@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/api/">
+    <Project Path="api/Schiza.Api/Schiza.Api.csproj" />
+  </Folder>
+  <Folder Name="/logEngine/">
+    <Project Path="logEngine/Schiza.LogEngine/Schiza.LogEngine.csproj" />
+  </Folder>
+</Solution>

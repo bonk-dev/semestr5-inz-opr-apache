@@ -1,0 +1,7 @@
+<Project>
+  <PropertyGroup>
+    <!-- Lock files make restores reproducible and let CI cache NuGet packages -->
+    <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
+    <RestoreLockedMode Condition="'$(ContinuousIntegrationBuild)' == 'true'">true</RestoreLockedMode>
+  </PropertyGroup>
+</Project>
