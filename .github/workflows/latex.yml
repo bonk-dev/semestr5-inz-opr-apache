@@ -1,0 +1,28 @@
+# .github/workflows/latex.yml
+name: Build presentation
+on:
+  push:
+    branches: [docs/st-presentation]
+    paths: ['prezentacje/**']
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: prezentacje
+          root_file: pierwsza_prezentacja.tex
+
+      - name: Rename PDF with timestamp
+        run: |
+          TS=$(TZ=Europe/Warsaw date +%Y-%m-%d_%H-%M)
+          echo "TS=$TS" >> "$GITHUB_ENV"
+          mv prezentacje/pierwsza_prezentacja.pdf "prezentacje/prezentacja_${TS}.pdf"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: prezentacja_${{ env.TS }}
+          path: prezentacje/prezentacja_${{ env.TS }}.pdf
