@@ -6,6 +6,7 @@ on:
     paths:
       - "api/**"
       - "logEngine/**"
+      - "shared/**"
       - "*.slnx"
       - "*.props"
       - "global.json"
@@ -17,6 +18,7 @@ on:
     paths:
       - "api/**"
       - "logEngine/**"
+      - "shared/**"
       - "*.slnx"
       - "*.props"
       - "global.json"
