@@ -4,6 +4,7 @@
   </Folder>
   <Folder Name="/logEngine/">
     <Project Path="logEngine/Schiza.LogEngine/Schiza.LogEngine.csproj" />
+    <Project Path="logEngine/Schiza.LogEngine.Tests/Schiza.LogEngine.Tests.csproj" />
   </Folder>
   <Folder Name="/shared/">
     <Project Path="shared/Schiza.Shared/Schiza.Shared.csproj" />

