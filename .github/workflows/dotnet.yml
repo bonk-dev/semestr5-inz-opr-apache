@@ -6,6 +6,7 @@ on:
     paths:
       - "api/**"
       - "logEngine/**"
+      - "shared/**"
       - "*.slnx"
       - "*.props"
       - "global.json"
@@ -17,6 +18,7 @@ on:
     paths:
       - "api/**"
       - "logEngine/**"
+      - "shared/**"
       - "*.slnx"
       - "*.props"
       - "global.json"
@@ -61,3 +63,6 @@ jobs:
 
       - name: Build
         run: dotnet build Schiza.slnx --configuration Release --no-restore
+
+      - name: Test
+        run: dotnet test --solution Schiza.slnx --configuration Release --no-build
