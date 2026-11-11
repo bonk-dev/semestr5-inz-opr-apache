@@ -4,3 +4,69 @@ GET {{Schiza.Api_HostAddress}}/weatherforecast/
 Accept: application/json
 
 ###
+
+# Classify a request (contract used by mod_schiza): 200 = safe, 403 = unsafe
+POST {{Schiza.Api_HostAddress}}/classify
+Content-Type: application/json
+
+{
+  "clientIp": "198.51.100.3",
+  "timestamp": "2026-11-05T02:10:19+01:00",
+  "requestLine": {
+    "kind": "Parsed",
+    "raw": "GET /.git/config HTTP/1.1",
+    "method": "GET",
+    "path": "/.git/config",
+    "query": null,
+    "protocol": "HTTP/1.1"
+  },
+  "referer": null,
+  "userAgent": "Mozilla/5.0",
+  "host": "example.com",
+  "tlsProtocol": null,
+  "uniqueId": null,
+  "response": null
+}
+
+###
+
+GET {{Schiza.Api_HostAddress}}/rules
+Accept: application/json
+
+###
+
+POST {{Schiza.Api_HostAddress}}/rules
+Content-Type: application/json
+
+{
+  "name": "Shell upload",
+  "description": "Common web shell names",
+  "field": "Path",
+  "matchType": "Regex",
+  "pattern": "/(c99|r57|shell)\\.php$",
+  "score": 0.9
+}
+
+###
+
+POST {{Schiza.Api_HostAddress}}/rules/7/activate
+
+###
+
+POST {{Schiza.Api_HostAddress}}/rules/7/deactivate
+
+###
+
+DELETE {{Schiza.Api_HostAddress}}/rules/7
+
+###
+
+GET {{Schiza.Api_HostAddress}}/events?take=20
+Accept: application/json
+
+###
+
+GET {{Schiza.Api_HostAddress}}/events?clientIp=203.0.113.77&source=BlockingModule
+Accept: application/json
+
+###
