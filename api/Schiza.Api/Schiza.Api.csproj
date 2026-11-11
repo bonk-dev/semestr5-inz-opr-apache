@@ -10,4 +10,8 @@
     <PackageReference Include="Microsoft.AspNetCore.OpenApi" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\shared\Schiza.Shared\Schiza.Shared.csproj" />
+  </ItemGroup>
+
 </Project>
