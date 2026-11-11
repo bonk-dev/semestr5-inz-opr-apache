@@ -1,3 +1,5 @@
+using Scalar.AspNetCore;
+
 using Schiza.Api.Mocks;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -16,6 +18,7 @@ app.Services.SeedMockEvents();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
+    app.MapScalarApiReference(options => options.WithOperationTitleSource(OperationTitleSource.Path)); // /scalar
 }
 
 app.UseHttpsRedirection();

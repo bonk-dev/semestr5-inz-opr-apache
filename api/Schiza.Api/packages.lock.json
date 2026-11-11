@@ -11,6 +11,12 @@
           "Microsoft.OpenApi": "[2.7.5, 3.0.0)"
         }
       },
+      "Scalar.AspNetCore": {
+        "type": "Direct",
+        "requested": "[2.18.5, )",
+        "resolved": "2.18.5",
+        "contentHash": "m7sb2hqbdUXPBa4MvFy7GZ8SU4YGDYhaFkaiATXCMRhIDMA6kJrRQnBO4Z5PRz175sRfYfSXBlyrxckbhhrQ3A=="
+      },
       "Microsoft.OpenApi": {
         "type": "Transitive",
         "resolved": "2.7.5",
