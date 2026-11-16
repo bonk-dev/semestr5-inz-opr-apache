@@ -12,13 +12,13 @@ public class ApacheLogParserTests
 
     private static readonly IApacheLogParser Parser = new ApacheLogParser();
 
-    public static TheoryData<string> AllLabels => [.. AccessLogFixture.Labels];
+    public static TheoryData<string> AllLabels => [.. LabeledFixture.AccessLog.Labels];
 
     [Theory]
     [MemberData(nameof(AllLabels))]
     public void Parse_AcceptsEveryRealLine(string label)
     {
-        Assert.IsType<LogParseResult.Parsed>(Parser.Parse(AccessLogFixture.Line(label)));
+        Assert.IsType<LogParseResult.Parsed>(Parser.Parse(LabeledFixture.AccessLog.Line(label)));
     }
 
     [Fact]
@@ -106,7 +106,7 @@ public class ApacheLogParserTests
         Assert.Equal(new RequestLine(RequestLineKind.Malformed, raw), request.RequestLine);
         Assert.Equal(400, request.Response!.Status);
         Assert.Equal(bytesSent, request.Response.BytesSent);
-        Assert.Equal(IPAddress.Parse(AccessLogFixture.Line(label).Split(' ')[0]), request.ClientIp);
+        Assert.Equal(IPAddress.Parse(LabeledFixture.AccessLog.Line(label).Split(' ')[0]), request.ClientIp);
     }
 
     [Theory]
@@ -162,9 +162,9 @@ public class ApacheLogParserTests
     [Fact]
     public void Parse_NeverThrowsOnTruncatedRealLines()
     {
-        foreach (string label in AccessLogFixture.Labels)
+        foreach (string label in LabeledFixture.AccessLog.Labels)
         {
-            string line = AccessLogFixture.Line(label);
+            string line = LabeledFixture.AccessLog.Line(label);
             for (int length = 0; length < line.Length; length++)
             {
                 Assert.NotNull(Parser.Parse(line[..length]));
@@ -221,5 +221,5 @@ public class ApacheLogParserTests
     }
 
     private static ApacheRequest ParseRequest(string label) =>
-        Assert.IsType<LogParseResult.Parsed>(Parser.Parse(AccessLogFixture.Line(label))).Request;
+        Assert.IsType<LogParseResult.Parsed>(Parser.Parse(LabeledFixture.AccessLog.Line(label))).Request;
 }

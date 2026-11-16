@@ -76,7 +76,7 @@ public sealed class ApacheLogParser : IApacheLogParser
         ApacheRequest request = new(
             clientIp,
             timestamp,
-            ParseRequestLine(requestLineField),
+            RequestLineParser.Parse(requestLineField),
             NullIfDash(refererField),
             NullIfDash(userAgentField),
             NullIfDash(hostField),
@@ -85,69 +85,6 @@ public sealed class ApacheLogParser : IApacheLogParser
             new ResponseInfo((int)status, bytesSent, bodyBytes, TimeSpan.FromMicroseconds(durationMicroseconds)));
 
         return new LogParseResult.Parsed(request);
-    }
-
-    private static RequestLine ParseRequestLine(ReadOnlySpan<char> raw)
-    {
-        if (raw is "-")
-        {
-            return new RequestLine(RequestLineKind.Missing, "-");
-        }
-
-        string rawText = raw.ToString();
-        int firstSpace = raw.IndexOf(' ');
-        int lastSpace = raw.LastIndexOf(' ');
-        if (firstSpace < 0 || firstSpace == lastSpace)
-        {
-            return new RequestLine(RequestLineKind.Malformed, rawText);
-        }
-
-        ReadOnlySpan<char> method = raw[..firstSpace];
-        ReadOnlySpan<char> target = raw[(firstSpace + 1)..lastSpace];
-        ReadOnlySpan<char> protocol = raw[(lastSpace + 1)..];
-        if (!IsMethod(method) || target.IsEmpty || target.Contains(' ') || !IsHttpProtocol(protocol))
-        {
-            return new RequestLine(RequestLineKind.Malformed, rawText);
-        }
-
-        int queryStart = target.IndexOf('?');
-        return new RequestLine(
-            RequestLineKind.Parsed,
-            rawText,
-            method.ToString(),
-            (queryStart < 0 ? target : target[..queryStart]).ToString(),
-            queryStart < 0 ? null : target[(queryStart + 1)..].ToString(),
-            protocol.ToString());
-    }
-
-    private static bool IsMethod(ReadOnlySpan<char> value)
-    {
-        foreach (char c in value)
-        {
-            if (!char.IsAsciiLetter(c) && c is not ('-' or '_'))
-            {
-                return false;
-            }
-        }
-
-        return !value.IsEmpty;
-    }
-
-    // accepts both HTTP/x and HTTP/x.y
-    private static bool IsHttpProtocol(ReadOnlySpan<char> value)
-    {
-        if (!value.StartsWith("HTTP/"))
-        {
-            return false;
-        }
-
-        ReadOnlySpan<char> version = value["HTTP/".Length..];
-        return version switch
-        {
-            [char major] => char.IsAsciiDigit(major),
-            [char major, '.', char minor] => char.IsAsciiDigit(major) && char.IsAsciiDigit(minor),
-            _ => false,
-        };
     }
 
     private static bool TryParseNumber(ReadOnlySpan<char> value, out long number) =>

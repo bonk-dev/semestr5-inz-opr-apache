@@ -36,3 +36,40 @@ foreach (string line in File.ReadLines("access.log"))
     }
 }
 ```
+
+## Quick start: ciała żądań z ModSecurity
+
+access.log nie zawiera danych POST, więc bierzemy je z audit logu ModSecurity, zapisywanego jako jeden obiekt JSON na linię:
+
+```
+SecRequestBodyAccess On
+SecAuditEngine On
+SecAuditLogParts ABDEFHIJZ
+SecAuditLogType Serial
+SecAuditLogFormat JSON
+SecAuditLog /var/log/apache2/modsec_audit.log
+```
+
+`transaction_id` z audit logu to wartość `UNIQUE_ID`, więc wpis dopasowujemy do linii access.log po `ApacheRequest.UniqueId`:
+
+```csharp
+using Schiza.LogEngine.ModSecurity;
+
+IModSecAuditLogParser auditParser = new ModSecAuditLogParser();
+
+Dictionary<string, RequestBody> bodies = [];
+foreach (string line in File.ReadLines("modsec_audit.log"))
+{
+    if (auditParser.Parse(line) is AuditLogParseResult.Parsed { Entry: { Body: { } body } entry })
+    {
+        bodies[entry.TransactionId] = body;
+    }
+}
+
+// request sparsowany z access.log
+// request ma typ LogParseResult i pochodzi z IApacheLogParser
+if (request.UniqueId is { } id && bodies.TryGetValue(id, out RequestBody? body))
+{
+    request = request with { Body = body };
+}
+```

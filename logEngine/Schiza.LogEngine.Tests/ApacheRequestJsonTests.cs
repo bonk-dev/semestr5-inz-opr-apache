@@ -9,13 +9,13 @@ public class ApacheRequestJsonTests
 {
     private static readonly IApacheLogParser Parser = new ApacheLogParser();
 
-    public static TheoryData<string> AllLabels => [.. AccessLogFixture.Labels];
+    public static TheoryData<string> AllLabels => [.. LabeledFixture.AccessLog.Labels];
 
     [Theory]
     [MemberData(nameof(AllLabels))]
     public void ParsedRequest_SurvivesJsonRoundTrip(string label)
     {
-        ApacheRequest request = Assert.IsType<LogParseResult.Parsed>(Parser.Parse(AccessLogFixture.Line(label))).Request;
+        ApacheRequest request = Assert.IsType<LogParseResult.Parsed>(Parser.Parse(LabeledFixture.AccessLog.Line(label))).Request;
 
         string json = JsonSerializer.Serialize(request, JsonSerializerOptions.Web);
 
@@ -25,7 +25,7 @@ public class ApacheRequestJsonTests
     [Fact]
     public void ClientIp_IsWrittenAsText()
     {
-        ApacheRequest request = Assert.IsType<LogParseResult.Parsed>(Parser.Parse(AccessLogFixture.Line("get-plain-zgrab"))).Request;
+        ApacheRequest request = Assert.IsType<LogParseResult.Parsed>(Parser.Parse(LabeledFixture.AccessLog.Line("get-plain-zgrab"))).Request;
 
         using JsonDocument json = JsonDocument.Parse(JsonSerializer.Serialize(request, JsonSerializerOptions.Web));
 
