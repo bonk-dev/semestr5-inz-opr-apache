@@ -27,4 +27,5 @@ public sealed record ApacheRequest(
     string? Host,
     string? TlsProtocol,
     string? UniqueId,
-    ResponseInfo? Response);
+    ResponseInfo? Response,
+    RequestBody? Body = null);
