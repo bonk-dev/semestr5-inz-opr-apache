@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\shared\Schiza.Shared\Schiza.Shared.csproj" />
+    <ProjectReference Include="..\..\application\Schiza.Application\Schiza.Application.csproj" />
+    <ProjectReference Include="..\..\infrastructure\Schiza.Infrastructure\Schiza.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>
