@@ -1,0 +1,567 @@
+% !TeX spellcheck = pl_PL-Polish
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage[polish]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\selectlanguage{polish}
+\usepackage{indentfirst}
+\usepackage{graphicx}
+\usepackage{xcolor}
+\usepackage{hyperref}
+\usepackage{float}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{longtable}
+\usepackage{enumitem}
+\usepackage{listings}
+\usepackage{microtype}
+
+\def\projectName{SCHIZA -- System Ciągłej Hybrydowej Identyfikacji Zagrożeń i Anomalii}
+\def\authorA{Dawid Pągowski}
+\def\authorB{Bartłomiej Łokaj}
+\def\authorC{Paweł Świderski}
+
+\newcommand\todo[1]{\textcolor{red}{#1}}
+\newcommand{\code}[1]{\texttt{#1}}
+\newcommand{\project}{Schiza}
+
+\definecolor{codebackground}{RGB}{245,245,245}
+\definecolor{codecomment}{RGB}{80,100,80}
+\definecolor{linkcolor}{RGB}{0,70,130}
+
+\hypersetup{
+    colorlinks=true,
+    linkcolor=linkcolor,
+    urlcolor=linkcolor,
+    pdftitle={SCHIZA -- System Ciągłej Hybrydowej Identyfikacji Zagrożeń i Anomalii},
+    pdfauthor={Zespół projektowy}
+}
+
+\lstset{
+    basicstyle=\ttfamily\small,
+    backgroundcolor=\color{codebackground},
+    frame=single,
+    breaklines=true,
+    columns=fullflexible,
+    keepspaces=true,
+    showstringspaces=false,
+    commentstyle=\color{codecomment}
+}
+
+\begin{document}
+\pagenumbering{gobble}
+\clearpage
+\begin{figure}[h]
+    \centering
+    {\includegraphics[width=0.5\linewidth]{../prezentacje/media/logo.jpg}}{\vspace{2cm}}
+\end{figure}
+
+\hspace{3cm}
+\begin{center}Dokumentacja projektowa\end{center}
+\hspace{3cm}
+\begin{center}\large\textbf{Inżynieria Oprogramowania}\end{center}
+\begin{center}\large\textit{\projectName}\end{center}
+
+\hspace{7cm}
+\begin{flushright}
+    Kierunek: Informatyka \par
+    \textit{\authorA} \par
+    \textit{\authorB} \par
+    \textit{\authorC} \par
+\end{flushright}
+\vfill
+\begin{center}Gliwice, 2026\end{center}
+
+\newpage
+\pagenumbering{arabic}
+\tableofcontents
+\newpage
+
+\section{Cel i zakres projektu}
+
+\project{} jest skrótem od nazwy \textbf{System Ciągłej Hybrydowej Identyfikacji
+Zagrożeń i Anomalii}. Nazwa odzwierciedla podstawowe założenia i rzeczywisty
+zakres implementacji projektu: monitorowanie kolejnych wpisów logów serwera
+Apache, łączenie kilku metod analizy oraz identyfikowanie żądań HTTP
+wskazujących na potencjalne zagrożenia lub nietypowe zachowania.
+
+Poszczególne człony nazwy mają następujące znaczenie:
+\begin{itemize}
+    \item \textbf{System} -- rozwiązanie obejmujące parsery logów, backend
+    w C\#, moduł detekcji w Pythonie oraz frontend webowy;
+    \item \textbf{Ciągłej} -- backend cyklicznie odczytuje nowe wpisy z pliku
+    logu Apache i przekazuje poprawnie sparsowane żądania do dalszej analizy;
+    \item \textbf{Hybrydowej} -- moduł detekcji łączy analizę opartą na
+    deterministycznych regułach bezpieczeństwa z analizą wykorzystującą model
+    uczenia maszynowego typu autoencoder;
+    \item \textbf{Identyfikacji} -- system analizuje ustandaryzowane dane
+    żądań HTTP i klasyfikuje je jako podejrzane lub nieoznaczone jako anomalne;
+    \item \textbf{Zagrożeń} -- reguły detekcji obejmują charakterystyczne
+    wzorce związane między innymi z SQL injection, XSS, path traversal,
+    ujawnieniem plików i command injection;
+    \item \textbf{Anomalii} -- model analizuje wektor cech żądania, a moduł
+    detekcji zwraca wynik punktowy, decyzję oraz informacje o poziomie
+    istotności i powodach klasyfikacji.
+\end{itemize}
+
+Celem projektu jest zbudowanie systemu, który obserwuje logi serwera Apache,
+parsuje żądania HTTP, przekazuje ich ustandaryzowaną reprezentację do modułu
+wykrywania anomalii, a następnie zapisuje i prezentuje zdarzenia uznane za
+podejrzane.
+
+System został podzielony na trzy główne obszary:
+\begin{enumerate}
+    \item parsery logów oraz współdzielone modele żądań,
+    \item backend odpowiedzialny za przetwarzanie, komunikację, zapis i API,
+    \item moduł detekcji Python oraz aplikacja webowa prezentująca wyniki.
+\end{enumerate}
+
+Głównym scenariuszem jest ciągłe odczytywanie nowych linii z pliku
+\code{access.log}. Dla każdej poprawnie sparsowanej linii backend buduje obiekt
+\code{ApacheRequest}, wysyła wybrane dane do detektora Python i zapisuje pełne
+zdarzenie, jeżeli detektor zwróci \code{is\_anomaly = true}.
+
+\section{Organizacja i podział odpowiedzialności}
+
+Podział odpowiedzialności przyjęty w projekcie przedstawiono w tabeli
+\ref{tab:roles}. Nazwy osób pozostawiono w formie ról zgodnie z dostarczonym
+podziałem zespołu.
+
+\begin{table}[H]
+    \centering
+    \caption{Podział odpowiedzialności w projekcie}
+    \label{tab:roles}
+    \begin{tabular}{p{0.18\textwidth}p{0.72\textwidth}}
+        \toprule
+        \textbf{Rola} & \textbf{Zakres odpowiedzialności} \\
+        \midrule
+        \authorA & Lead projektu oraz właściciel repozytorium i prototypu projektu
+        na GitHubie. Autor parsera logów w katalogu \code{/logEngine},
+        komponentów współdzielonych w \code{/shared} oraz mocków
+        wykorzystywanych do testowania frontendu i parsera. \\
+        \authorB & Autor modułu detekcji opartego na Pythonie
+        (\code{/Deep Learning Detection Module}) oraz backendu
+        zaimplementowanego w C\#. \\
+        \authorC & Autor frontendowej części aplikacji. \\
+        \bottomrule
+    \end{tabular}
+\end{table}
+
+
+\section{Architektura systemu}
+
+\subsection{Podział na projekty i warstwy}
+
+Rozwiązanie .NET jest zapisane w pliku \code{Schiza.slnx} i składa się z
+następujących projektów:
+
+\begin{itemize}
+    \item \code{domain/Schiza.Domain} -- encje domenowe, w szczególności
+    \code{FlaggedEvent},
+    \item \code{application/Schiza.Application} -- porty, przypadki użycia
+    i logika aplikacyjna niezależna od infrastruktury,
+    \item \code{infrastructure/Schiza.Infrastructure} -- SQLite, worker logów,
+    klient HTTP detektora oraz implementacje infrastrukturalne,
+    \item \code{api/Schiza.Api} -- aplikacja ASP.NET Core, kontrolery,
+    uwierzytelnianie i rejestracja zależności,
+    \item \code{shared/Schiza.Shared} -- wspólne modele żądań i konwertery JSON,
+    \item \code{logEngine/Schiza.LogEngine} -- niezależny parser logów Apache
+    i parser audit logów ModSecurity.
+\end{itemize}
+
+Zależności warstw można przedstawić następująco:
+
+\begin{verbatim}
+API -> Application -> Domain
+ |         |
+ +-> Infrastructure -> LogEngine, Shared, SQLite, Python HTTP API
+
+Shared jest wykorzystywany przez Application, Infrastructure i LogEngine.
+\end{verbatim}
+
+Kontrolery nie komunikują się bezpośrednio z SQLite ani z modułem Python.
+Wykorzystują interfejsy warstwy Application, a ich implementacje są dostarczane
+przez Infrastructure.
+
+\subsection{Główny przepływ danych}
+
+\begin{verbatim}
+Apache access.log
+       |
+       v
+ApacheLogWorker -- odczyt nowych linii co około 2 sekundy
+       |
+       v
+ApacheLogParser
+       |
+       +-- Unparseable -> ostrzeżenie w logu backendu
+       |
+       v
+ApacheRequest
+       |
+       v
+LogEventProcessor
+       |
+       v
+PythonAnomalyDetector -- POST /predict
+       |
+       +-- is_anomaly = false -> brak zapisu
+       |
+       +-- is_anomaly = true -> SQLite FlaggedEvents
+                                      |
+                                      v
+                              API + frontend React
+\end{verbatim}
+
+\section{Przetwarzanie logów Apache}
+
+\subsection{Format wejściowy}
+
+Parser \code{ApacheLogParser} obsługuje rozszerzony format Apache odpowiadający
+następującej dyrektywie \code{LogFormat}:
+
+\begin{lstlisting}
+LogFormat "%h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\" %D \"%{Host}i\" %v:%p %{SSL_PROTOCOL}x %B %{UNIQUE_ID}e" combined_ext
+\end{lstlisting}
+
+Parser rozpoznaje między innymi:
+\begin{itemize}
+    \item adres IP klienta i timestamp,
+    \item request line, w tym metodę, ścieżkę, query string i protokół,
+    \item status HTTP, liczbę wysłanych bajtów i czas trwania żądania,
+    \item referer, User-Agent, host i protokół TLS,
+    \item opcjonalny rozmiar body oraz wartość \code{UNIQUE\_ID}.
+\end{itemize}
+
+Wartość \code{UNIQUE\_ID} może zostać wykorzystana do powiązania wpisu
+\code{access.log} z odpowiednim wpisem audit logu ModSecurity.
+
+\subsection{Odporność parsera}
+
+Parser nie rzuca wyjątku dla typowych błędów formatu. Zwraca wynik typu
+\code{LogParseResult}, który może być wariantem \code{Parsed} albo
+\code{Unparseable} z kodem błędu, na przykład \code{Empty},
+\code{UnexpectedStructure}, \code{InvalidClientIp}, \code{InvalidTimestamp}
+lub \code{InvalidNumber}.
+
+Niekompletna linia logu nie jest przekazywana do detektora. Jest rejestrowana
+jako ostrzeżenie przez \code{ApacheLogWorker}. W środowisku produkcyjnym należy
+uwzględnić, że odczyt pliku w trakcie zapisu może wymagać dodatkowego mechanizmu
+buforowania niepełnych linii.
+
+\section{Modele współdzielone i ModSecurity}
+
+\subsection{ApacheRequest}
+
+\code{ApacheRequest} jest głównym modelem żądania używanym w backendzie. Zawiera:
+\begin{itemize}
+    \item \code{ClientIp}, \code{Timestamp} i \code{RequestLine},
+    \item referer, User-Agent, host i protokół TLS,
+    \item \code{UniqueId} z modułu \code{mod\_unique\_id},
+    \item opcjonalne dane odpowiedzi \code{ResponseInfo},
+    \item opcjonalne \code{RequestBody} zawierające typ treści i body żądania.
+\end{itemize}
+
+Wartości adresów IP są serializowane jako tekst. Nazwy JSON są zgodne z opcjami
+\code{JsonSerializerOptions.Web}, co pozwala bezpośrednio mapować dane na kontrakty
+innych komponentów.
+
+\subsection{Parser audit logu ModSecurity}
+
+Moduł \code{Schiza.LogEngine.ModSecurity} obsługuje serializowany JSON z
+\code{modsec\_audit.log}. Parser:
+\begin{enumerate}
+    \item sprawdza poprawność JSON i strukturę transakcji,
+    \item odczytuje \code{transaction\_id}, adres klienta i timestamp,
+    \item parsuje request line oraz nagłówki,
+    \item łączy fragmenty body zapisane w tablicy,
+    \item odczytuje status odpowiedzi,
+    \item zwraca \code{ModSecAuditEntry} albo szczegółowy błąd parsowania.
+\end{enumerate}
+
+Body z audit logu może zostać dołączone do obiektu \code{ApacheRequest} na
+podstawie zgodnego \code{TransactionId}/\code{UniqueId}. Dzięki temu dane body
+POST, których zwykle nie ma w \code{access.log}, mogą zostać przekazane do
+detektora.
+
+\section{Backend C\#}
+
+\subsection{Worker odczytujący log}
+
+\code{ApacheLogWorker} jest usługą działającą w tle. Ścieżka pliku jest pobierana
+z konfiguracji \code{ApacheLog:Path}. Worker zapamiętuje pozycję w pliku, otwiera
+plik z możliwością współdzielenia i odczytuje nowe linie. Błędy parsowania są
+logowane, natomiast poprawne żądania trafiają do \code{LogEventProcessor}.
+
+Drugi worker, \code{FlaggedEventRetentionWorker}, wykonuje okresowe czyszczenie
+zdarzeń starszych niż 30 dni.
+
+\subsection{LogEventProcessor}
+
+Procesor wywołuje interfejs \code{IAnomalyDetector}. Jeżeli odpowiedź JSON zawiera
+pole \code{is\_anomaly} ustawione na \code{true}, przekazuje żądanie, surową linię
+logu i pełną odpowiedź detektora do repozytorium zdarzeń. Błędy komunikacji HTTP,
+JSON i nieprawidłowego stanu są rejestrowane przez logger.
+
+\subsection{SQLite i deduplikacja}
+
+Repozytorium \code{SqliteFlaggedEventRepository} tworzy tabelę
+\code{FlaggedEvents} przy uruchomieniu aplikacji. Przechowywane są między innymi:
+\begin{itemize}
+    \item czas zdarzenia i czas detekcji,
+    \item surowa linia Apache,
+    \item serializowane żądanie i pełny JSON detekcji,
+    \item severity, metoda, URL i adres IP klienta.
+\end{itemize}
+
+Klucz zdarzenia jest obliczany jako SHA-256 surowej linii logu. Ogranicza to
+wielokrotne zapisanie tego samego wpisu przy ponownym odczycie.
+
+\section{Komunikacja z modułem detekcji Python}
+
+\subsection{Kontrakt HTTP}
+
+Backend korzysta z klienta \code{HttpClient}. Bazowy adres jest pobierany z
+\code{PythonDetection:BaseUrl}, domyślnie jest to \code{http://127.0.0.1:8000/}.
+Dla pojedynczego żądania adapter wysyła \code{POST /predict} z JSON-em:
+
+\begin{lstlisting}
+{
+  "method": "POST",
+  "url": "/login?next=/admin",
+  "user_agent": "curl/8.0",
+  "body": "username=admin&password=..."
+}
+\end{lstlisting}
+
+Pole \code{body} ma wartość \code{request.Body.Content}, a przy braku body pusty
+string. Dzięki temu body odczytane z ModSecurity jest analizowane przez Python.
+
+\subsection{Odpowiedź detektora}
+
+Endpoint \code{/predict} zwraca między innymi:
+\begin{itemize}
+    \item \code{anomaly\_score}, \code{threshold} i \code{score\_ratio},
+    \item \code{is\_anomaly} oraz \code{severity},
+    \item listę uruchomionych reguł i powodów,
+    \item wyjaśnienia najważniejszych cech modelu.
+\end{itemize}
+
+Endpoint \code{/predict/batch} obsługuje listę do 1000 żądań i jest przeznaczony
+do monitorowania w trybie wsadowym. Backend C\# używa obecnie endpointu
+pojedynczego \code{/predict}.
+
+\section{Poglądowe działanie detektora}
+
+Moduł Python przyjmuje już znormalizowane dane, a nie surową linię
+\code{access.log}. Dla każdego żądania wykonuje następujące kroki:
+
+\begin{enumerate}
+    \item normalizuje metodę, URL, User-Agent i body,
+    \item rozdziela ścieżkę i parametry zapytania,
+    \item wyznacza cechy długości, głębokości ścieżki, liczby parametrów,
+    udziału znaków specjalnych i zakodowanych fragmentów,
+    \item analizuje body, w tym liczbę parametrów i znaki specjalne,
+    \item sprawdza sygnatury reguł bezpieczeństwa, takie jak SQL injection,
+    XSS, traversal, ujawnienie plików lub command injection,
+    \item przekazuje wektor cech do preprocessora i autoenkodera,
+    \item łączy wynik modelu statystycznego z regułami deterministycznymi,
+    \item buduje decyzję, poziom severity i objaśnienie XAI.
+\end{enumerate}
+
+Poglądowy schemat detekcji:
+
+\begin{verbatim}
+method, url, user_agent, body
+              |
+              v
+      ekstrakcja cech i dekodowanie URL
+              |
+       +------+------+
+       |             |
+       v             v
+   reguły       preprocessor
+ bezpieczeństwa       |
+       |              v
+       |          autoencoder
+       |              |
+       +-------> decyzja i score
+                       |
+                       v
+       is_anomaly, severity, reasons, top_features
+\end{verbatim}
+
+Schemat ma charakter poglądowy. Szczegółowe progi, sygnatury i cechy są
+zdefiniowane w kodzie modułu \code{src/anomaly\_detection} oraz w plikach modeli.
+
+\section{API i funkcjonalności aplikacji}
+
+\subsection{Uwierzytelnianie}
+
+Backend korzysta z uwierzytelniania cookie. Dostępne są endpointy:
+\begin{itemize}
+    \item \code{POST /api/auth/login} -- logowanie administratora,
+    \item \code{POST /api/auth/logout} -- zakończenie sesji,
+    \item \code{GET /api/auth/me} -- sprawdzenie bieżącej sesji.
+\end{itemize}
+
+Cookie sesji jest oznaczone jako HttpOnly i SameSite Strict. Endpointy zdarzeń
+wymagają roli \code{Admin}.
+
+\subsection{Zdarzenia anomalii}
+
+\begin{itemize}
+    \item \code{GET /api/anomalies} -- lista zdarzeń z paginacją i filtrem severity,
+    \item \code{GET /api/anomalies/\{id\}} -- szczegóły zdarzenia,
+    \item \code{GET /} -- prosty status backendu.
+\end{itemize}
+
+Szczegóły zawierają surowy wpis, sparsowane żądanie, wynik detektora i dane
+wyjaśniające. Wyświetlane treści pochodzące z żądania są traktowane jako dane
+niezaufane.
+
+\subsection{Funkcjonalności frontendu}
+
+Frontend React/TypeScript zapewnia:
+\begin{enumerate}
+    \item formularz logowania administratora,
+    \item pobieranie listy oflagowanych żądań,
+    \item prezentację adresu klienta, czasu, metody, URL i severity,
+    \item otwieranie szczegółów zdarzenia,
+    \item prezentację surowej linii Apache, żądania i odpowiedzi detektora,
+    \item wylogowanie i zamknięcie widoku szczegółów.
+\end{enumerate}
+
+Aplikacja frontendowa korzysta z Vite i przekazuje żądania \code{/api} do backendu
+podczas pracy deweloperskiej.
+
+\section{Stos technologiczny}
+
+\begin{longtable}{p{0.25\textwidth}p{0.62\textwidth}}
+    \caption{Technologie użyte w projekcie}\label{tab:stack}\\
+    \toprule
+    \textbf{Obszar} & \textbf{Technologie} \\
+    \midrule
+    Backend & C\#, .NET 10, ASP.NET Core, kontrolery MVC, HttpClient \\
+    Przechowywanie & SQLite, Microsoft.Data.Sqlite \\
+    Parsery & C\#, Apache access.log, ModSecurity Serial JSON \\
+    Detektor & Python, FastAPI, Uvicorn, PyTorch, pandas, NumPy,
+    scikit-learn, joblib \\
+    Frontend & React 19, TypeScript, Vite, CSS \\
+    Testy & xUnit/.NET test runner, pytest, testy TypeScript przez kompilację
+    projektu frontendowego \\
+    Dokumentacja & Markdown i LaTeX \\
+    \bottomrule
+\end{longtable}
+
+\section{Założenia techniczne i niefunkcjonalne}
+
+\begin{itemize}
+    \item System pracuje asynchronicznie: worker odczytuje log, a klient HTTP
+    komunikuje się z detektorem z użyciem \code{CancellationToken}.
+    \item Parser nie interpretuje body z samego access logu; body może zostać
+    dołączone z ModSecurity.
+    \item Surowe żądania i odpowiedzi detektora są przechowywane wyłącznie dla
+    zdarzeń oznaczonych jako anomalne.
+    \item Dane wejściowe żądań są potencjalnie kontrolowane przez atakującego i
+    nie powinny być traktowane jako HTML ani wykonywany kod.
+    \item Detektor może działać jako osobny proces FastAPI na tym samym hoście
+    albo jako usługa dostępna pod adresem skonfigurowanym w backendzie.
+    \item Model detekcji wymaga obecności plików modelu w katalogu
+    \code{Deep Learning Detection Module/models}.
+\end{itemize}
+
+\section{Uruchomienie i wdrożenie}
+
+Szczegółowe instrukcje uruchomienia znajdują się w pliku \code{UserManual.md}.
+Główny wariant zakłada Linux i katalog główny repozytorium jako bieżący katalog.
+Typowa kolejność jest następująca:
+
+\begin{enumerate}
+    \item utworzenie i aktywacja środowiska Python w katalogu detektora,
+    \item uruchomienie FastAPI na porcie 8000,
+    \item konfiguracja \code{ApacheLog:Path}, \code{Storage:DatabasePath}
+    i \code{PythonDetection:BaseUrl},
+    \item uruchomienie API ASP.NET Core,
+    \item uruchomienie frontendu Vite.
+\end{enumerate}
+
+W środowisku produkcyjnym należy dodatkowo skonfigurować usługę systemową,
+reverse proxy, TLS, kopie zapasowe SQLite i właściwe zarządzanie sekretami.
+
+\section{Testowanie i weryfikacja}
+
+Projekt zawiera testy parsera Apache, parsera ModSecurity, serializacji modeli,
+repozytorium SQLite i klienta detektora. Weryfikacja wykonana dla aktualnego
+stanu projektu wykazała:
+\begin{itemize}
+    \item 195 zaliczonych testów .NET,
+    \item 36 zaliczonych testów Python,
+    \item poprawny build frontendu przez \code{npm run build},
+    \item poprawne uruchomienie endpointów \code{/health} i \code{/predict}
+    z załadowanym modelem.
+\end{itemize}
+
+\todo{Uzupełnić diagramy architektury i sekwencji w formie grafik, jeśli dokument
+będzie składany jako pełna praca projektowa.}
+
+\section{Organizacja pracy}
+
+\todo{Uzupełnić sposób planowania zadań, narzędzia komunikacji, zasady przeglądu
+kodu, strategię branchowania, harmonogram i podział pracy w kolejnych tygodniach.}
+
+\section{Uwarunkowania prawne i społeczne}
+
+System przetwarza adresy IP, identyfikatory transakcji, nagłówki HTTP i fragmenty
+żądań. W zależności od jurysdykcji dane te mogą stanowić dane osobowe lub dane
+umożliwiające identyfikację użytkownika.
+
+\todo{Uzupełnić analizę podstawy prawnej przetwarzania logów, okresu retencji,
+zasad anonimizacji, kontroli dostępu, obowiązków administratora danych oraz
+informowania użytkowników.}
+
+\section{Analiza rynku i konkurencji}
+
+System należy do kategorii narzędzi monitoringu bezpieczeństwa aplikacji,
+analizy logów, SIEM oraz detekcji anomalii. Rozwiązanie łączy parser Apache,
+reguły bezpieczeństwa i model uczenia maszynowego w lekkiej architekturze
+lokalnej.
+
+\todo{Uzupełnić analizę rynku, grupę docelową, porównanie z narzędziami SIEM,
+WAF i systemami IDS/IPS, przewagi rozwiązania, koszty wdrożenia oraz model
+utrzymania.}
+
+\section{Ograniczenia i dalszy rozwój}
+
+Aktualne ograniczenia obejmują zależność parsera od określonego rozszerzonego
+formatu logu, konieczność dostępności modelu Python oraz brak rozbudowanej
+orkiestracji wdrożenia produkcyjnego.
+
+Potencjalne kierunki rozwoju:
+\begin{itemize}
+    \item bezpieczne buforowanie niepełnych linii podczas rotacji i zapisu logu,
+    \item obsługa większej liczby formatów Apache i innych źródeł logów,
+    \item wsadowe wysyłanie żądań do endpointu \code{/predict/batch},
+    \item rozbudowane filtrowanie, sortowanie i paginacja w interfejsie,
+    \item monitoring dostępności i czasu odpowiedzi detektora,
+    \item wdrożenie z użyciem kontenerów i usług systemowych.
+\end{itemize}
+
+\section{Podsumowanie}
+
+\project{} (System Ciągłej Hybrydowej Identyfikacji Zagrożeń i Anomalii) jest
+systemem łączącym cykliczne monitorowanie logów Apache, deterministyczne reguły
+bezpieczeństwa i analizę anomalii wykonywaną przez model uczenia maszynowego
+w module Python. Nazwa odzwierciedla zastosowany sposób działania: odczyt
+kolejnych wpisów logu, analizę żądań HTTP z wykorzystaniem podejścia
+hybrydowego oraz identyfikowanie zdarzeń wskazujących na potencjalne zagrożenia
+lub nietypowe zachowania.
+
+Rozdzielenie backendu, parserów, detektora i frontendu ułatwia niezależne
+testowanie oraz wymianę poszczególnych komponentów. Najważniejszym kontraktem
+integracyjnym jest znormalizowane żądanie zawierające metodę, URL, User-Agent
+i body, które backend wysyła do endpointu detektora.
+
+\end{document}
