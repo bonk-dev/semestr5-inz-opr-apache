@@ -1,9 +1,10 @@
-using Schiza.Application;
-using Schiza.LogEngine.Parsing;
-using Schiza.Shared.Requests;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
+using Schiza.Application;
+using Schiza.LogEngine.Parsing;
+using Schiza.Shared.Requests;
 
 namespace Schiza.Infrastructure;
 

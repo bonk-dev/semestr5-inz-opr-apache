@@ -5,8 +5,12 @@ on:
     branches: [main]
     paths:
       - "api/**"
+      - "application/**"
+      - "domain/**"
+      - "infrastructure/**"
       - "logEngine/**"
       - "shared/**"
+      - "tools/**"
       - "*.slnx"
       - "*.props"
       - "global.json"
@@ -17,8 +21,12 @@ on:
     branches: [main]
     paths:
       - "api/**"
+      - "application/**"
+      - "domain/**"
+      - "infrastructure/**"
       - "logEngine/**"
       - "shared/**"
+      - "tools/**"
       - "*.slnx"
       - "*.props"
       - "global.json"
