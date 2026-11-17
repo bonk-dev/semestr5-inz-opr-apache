@@ -1,11 +1,12 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Schiza.Api.Contracts;
-using Schiza.Api.Mocks;
+using Schiza.Application.Legacy;
 
 namespace Schiza.Api.Controllers;
 
 [ApiController]
+[Authorize(Roles = "Admin")]
 [Route("events")]
 public sealed class EventsController(IEventStore events) : ControllerBase
 {

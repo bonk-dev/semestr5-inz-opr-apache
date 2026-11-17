@@ -1,3 +1,17 @@
+.page { padding: 2rem; text-align: left; }
+.page header { display: flex; justify-content: space-between; align-items: center; }
+.card { border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; box-shadow: var(--shadow); }
+.login { max-width: 24rem; margin: 3rem auto; display: grid; gap: 1rem; }
+label { display: grid; gap: .3rem; }
+input, button { font: inherit; padding: .5rem; }
+button { cursor: pointer; }
+table { width: 100%; border-collapse: collapse; margin-top: 1rem; }
+th, td { padding: .7rem; border-bottom: 1px solid var(--border); text-align: left; vertical-align: top; }
+.error { color: #c62828; }
+.detail { margin-top: 2rem; }
+pre { overflow: auto; background: var(--code-bg); padding: 1rem; white-space: pre-wrap; }
+code { white-space: pre-wrap; word-break: break-word; }
+
 .counter {
   font-size: 16px;
   padding: 5px 10px;

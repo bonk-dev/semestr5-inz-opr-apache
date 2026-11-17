@@ -480,3 +480,7 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Oznaczone zbiory treningowe: zawierają adresy IP klientów (dane osobowe, RODO)
+/dataset/
+/tools/**/dataset/

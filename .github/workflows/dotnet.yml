@@ -5,8 +5,12 @@ on:
     branches: [main]
     paths:
       - "api/**"
+      - "application/**"
+      - "domain/**"
+      - "infrastructure/**"
       - "logEngine/**"
       - "shared/**"
+      - "tools/**"
       - "*.slnx"
       - "*.props"
       - "global.json"
@@ -14,11 +18,15 @@ on:
       - ".editorconfig"
       - ".github/workflows/dotnet.yml"
   pull_request:
-    branches: [main]
+    branches: [main, Bartlomiej-cleanup]
     paths:
       - "api/**"
+      - "application/**"
+      - "domain/**"
+      - "infrastructure/**"
       - "logEngine/**"
       - "shared/**"
+      - "tools/**"
       - "*.slnx"
       - "*.props"
       - "global.json"

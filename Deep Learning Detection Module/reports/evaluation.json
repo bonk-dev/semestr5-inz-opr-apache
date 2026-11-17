@@ -1,0 +1,89 @@
+{
+  "strip_body": false,
+  "results": [
+    {
+      "model": "Rules only (open-world)",
+      "threshold": null,
+      "precision": 1.0,
+      "recall": 0.1642130460801915,
+      "f1": 0.2821013673280559,
+      "false_positive_rate": 0.0,
+      "tn": 36000,
+      "fp": 0,
+      "fn": 20949,
+      "tp": 4116,
+      "scoring_latency_ms_per_request": 0.004095712765273627
+    },
+    {
+      "model": "Autoencoder",
+      "threshold": 0.07442338019609451,
+      "precision": 0.9934998289428669,
+      "recall": 0.2317175344105326,
+      "f1": 0.375788554236356,
+      "false_positive_rate": 0.0010555555555555555,
+      "tn": 35962,
+      "fp": 38,
+      "fn": 19257,
+      "tp": 5808,
+      "scoring_latency_ms_per_request": 0.00022088921643228674
+    },
+    {
+      "model": "Autoencoder + rules",
+      "threshold": 0.07442338019609451,
+      "precision": 0.9953821849556447,
+      "recall": 0.3267903451027329,
+      "f1": 0.49204060791734244,
+      "false_positive_rate": 0.0010555555555555555,
+      "tn": 35962,
+      "fp": 38,
+      "fn": 16874,
+      "tp": 8191,
+      "scoring_latency_ms_per_request": 0.004316601981705914
+    },
+    {
+      "model": "Isolation Forest",
+      "threshold": 0.1546329434205054,
+      "precision": 0.9537037037037037,
+      "recall": 0.02054657889487333,
+      "f1": 0.0402265182581527,
+      "false_positive_rate": 0.0006944444444444445,
+      "tn": 35975,
+      "fp": 25,
+      "fn": 24550,
+      "tp": 515,
+      "scoring_latency_ms_per_request": 0.004098915909547754
+    },
+    {
+      "model": "Isolation Forest + rules",
+      "threshold": 0.1546329434205054,
+      "precision": 0.994218316373728,
+      "recall": 0.1715140634350688,
+      "f1": 0.29255844023274014,
+      "false_positive_rate": 0.0006944444444444445,
+      "tn": 35975,
+      "fp": 25,
+      "fn": 20766,
+      "tp": 4299,
+      "scoring_latency_ms_per_request": 0.008194628674821382
+    },
+    {
+      "model": "[diagnostic] Autoencoder + closed-world rules",
+      "threshold": 0.07442338019609451,
+      "precision": 0.9979915433403805,
+      "recall": 0.7533213644524237,
+      "f1": 0.8585654200295555,
+      "false_positive_rate": 0.0010555555555555555,
+      "tn": 35962,
+      "fp": 38,
+      "fn": 6183,
+      "tp": 18882,
+      "scoring_latency_ms_per_request": null
+    }
+  ],
+  "rule_hits": {
+    "suspicious_payload": {
+      "normal": 0,
+      "anomalous": 4116
+    }
+  }
+}
