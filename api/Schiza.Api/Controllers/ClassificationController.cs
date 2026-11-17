@@ -2,8 +2,7 @@ using System.Globalization;
 
 using Microsoft.AspNetCore.Mvc;
 
-using Schiza.Api.Contracts;
-using Schiza.Api.Mocks;
+using Schiza.Application.Legacy;
 using Schiza.Shared.Requests;
 
 namespace Schiza.Api.Controllers;

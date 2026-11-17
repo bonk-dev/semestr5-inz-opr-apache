@@ -1,0 +1,30 @@
+{
+  "paths": [
+    "/",
+    "/about",
+    "/api/v1/items",
+    "/blog",
+    "/blog/post",
+    "/cart",
+    "/contact",
+    "/images/logo.png",
+    "/index.html",
+    "/login",
+    "/products",
+    "/products/view",
+    "/search",
+    "/static/app.js",
+    "/static/style.css"
+  ],
+  "param_names": [
+    "id",
+    "page",
+    "q",
+    "ref",
+    "sort"
+  ],
+  "methods": [
+    "GET",
+    "POST"
+  ]
+}

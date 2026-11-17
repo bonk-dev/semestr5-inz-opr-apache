@@ -1,11 +1,13 @@
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
-using Schiza.Api.Contracts;
-using Schiza.Api.Mocks;
+using Schiza.Application.Legacy;
+using Schiza.Infrastructure;
 
 namespace Schiza.Api.Controllers;
 
 [ApiController]
+[Authorize(Roles = "Admin")]
 [Route("rules")]
 public sealed class RulesController(IRuleStore rules) : ControllerBase
 {
