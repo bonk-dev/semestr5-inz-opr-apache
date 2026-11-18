@@ -1,37 +1,24 @@
-import { useBlockedIps } from "../stores/useBlockedIps";
+import { useState } from "react";
+import EventsPage from "./pages/EventsPage";
+import BlockedIpsPage from "./pages/BlockedIpsPage";
 
-export default function BlockedIpsPage(){
-    const { items, loading, error, retry } = useBlockedIps();
+type Tab = "events" | "blocked"; 
 
-    return (
-        <main className="blocked-ips-view">
-            <h1>Zablokowane adresy IP</h1>
+export default function App() {
+  const [tab, setTab] = useState<Tab>("events");
 
-            {loading && <p role="status">Ładownaie...</p>}
-            {error && (
-                <p role="alert">
-                    {error} <button onClick={retry}>Spróbuj ponownie</button>
-                </p>
-            )}
-            {!loading && !error && items.length === 0 && <p>Brak zablokowanych adresów IP.</p>}
-            {!loading && !error && items.length > 0 && (
-                <table>
-                    <thead>
-                        <tr>
-                            <th>Adres IP</th>
-                            <th>Powód</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {items.map((b) =>(
-                            <tr key={b.ip}>
-                                <td>{b.ip}</td>
-                                <td>{b.reason ?? "-"}</td>
-                            </tr>
-                        ))}
-                    </tbody>
-                </table>
-            )}
-        </main>
-    );
+  return(
+    <>
+      <nav className="app-nav">
+        <button onClick={() => setTab("events")} aria-pressed={tab === "events"}>
+          Logi
+        </button>
+        <button onClick={() => setTab("blocked")} aria-pressed={tab === "blocked"}>
+          Zablokowane IP
+        </button>
+      </nav>
+
+      {tab === "events" ? <EventsPage/> : <BlockedIpsPage/>}
+    </>
+  );
 }
