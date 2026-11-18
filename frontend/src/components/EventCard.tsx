@@ -9,12 +9,12 @@ interface EventCardProps {
 export function EventCard({event}: EventCardProps){
     const {request: req, verdict } = event;
     const line = req.requestLine;
-
+    const status = verdict ? (verdict.isSafe ? "safe" : "unsafe") : "";
     return (
-        <article className={`event ${verdict.isSafe ? "safe" : "dangerous"}`}>
+        <article className={`event ${status}`}>
             <header>
-                <strong>{verdict.isSafe ? "Bezpieczny" : "Niebezpieczny"}</strong>
-                <span>wynik: {verdict.score}</span>
+                <strong>{verdict ?( verdict.isSafe ? "Bezpieczny" : "Niebezpieczny") : "Brak werdyktu"}</strong>
+                {verdict && <span>wynik: {verdict.score}</span>}
                 <span className="id">{event.id}</span>
             </header>
 
@@ -27,7 +27,17 @@ export function EventCard({event}: EventCardProps){
                         <Field label="Źródło" value={event.source}/>
                     </dl>
                 </section>
-
+                {verdict && (
+                    <section>
+                        <h3>Werdykt</h3>
+                        <dl>
+                        <Field label="Bezpieczny" value={verdict.isSafe ? "tak" : "nie"} />
+                        <Field label="Wynik" value={verdict.score} />
+                        <Field label="Powód" value={verdict.reason} />
+                        <Field label="ID reguły" value={verdict.ruleId} />
+                        </dl>
+                    </section>
+                )}
                 <section>
                     <h3>Żądanie</h3>
                     <dl>
