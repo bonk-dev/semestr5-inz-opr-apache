@@ -31,5 +31,5 @@ export interface SecurityEvent {
     classifiedAt: string;
     source: string;
     request: RequestData;
-    verdict: Verdict;
+    verdict?: Verdict;
 }
