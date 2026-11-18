@@ -28,17 +28,18 @@ export function EventsTable({events}: EventsTableProps){
                 <tbody>
                     {events.map((e) => {
                         const open = expandedId === e.id;
+                        const isSafe = e.verdict?.isSafe;
                         return (
                             <Fragment key={e.id}>
-                                <tr className={e.verdict.isSafe ? "safe" : "dangerous"}>
+                                <tr className={isSafe === undefined ? "" : isSafe ? "safe" : "dangerous"}>
                                     <td>{formatDate(e.classifiedAt)}</td>
-                                    <td>{e.request.clientIp}</td>
+                                    <td>{e.request?.clientIp}</td>
                                     <td>
-                                        <code>{e.request.requestLine.raw}</code>
+                                        <code>{e.request?.requestLine?.raw}</code>
                                     </td>
                                     <td>{e.source}</td>
-                                    <td>{e.verdict.isSafe ? "Bezpieczny" : "Niebezpieczny"}</td>
-                                    <td>{e.verdict.score}</td>
+                                    <td>{isSafe === undefined ? "-" : isSafe ? "Bezpieczny" : "Niebezpieczny"}</td>
+                                    <td>{e.verdict?.score ?? "-"}</td>
                                     <td>
                                         <button onClick={() => toggle(e.id)} aria-expanded={open}>
                                             {open ? "Ukryj" : "Szczegóły"}
