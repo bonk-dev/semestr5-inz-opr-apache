@@ -1,0 +1,376 @@
+[
+  {
+    "name": "normal",
+    "request": {
+      "method": "GET",
+      "url": "http://localhost:8080/tienda1/publico/anadir.jsp?id=3&nombre=Vino+Rioja&precio=100&cantidad=55&B1=A%F1adir+al+carrito",
+      "user_agent": "Mozilla/5.0 (compatible; Konqueror/3.5; Linux) KHTML/3.5.8 (like Gecko)"
+    },
+    "response": {
+      "anomaly_score": 0.00018169244867749512,
+      "threshold": 0.02371569164097309,
+      "is_anomaly": false,
+      "triggered_rules": [],
+      "score_ratio": 0.007661275556627199,
+      "severity": "none",
+      "summary": "Within normal range (1% of threshold)",
+      "reasons": [],
+      "top_features": [
+        {
+          "feature": "path_depth",
+          "label": "Path depth",
+          "input_value": -0.16606543958187103,
+          "reconstructed_value": -0.19478562474250793,
+          "reconstruction_error": 0.0008248490356612681,
+          "error_share": 0.3492160400185095,
+          "raw_value": 3,
+          "typical_value": 3.0545751633986926,
+          "typical_std": 0.32863649173040527,
+          "z_score": -0.16606543958187103,
+          "direction": "lower",
+          "description": "Path depth is 3, typical is 3.05 ± 0.329 (-0.2σ); unusual in combination with the other features"
+        },
+        {
+          "feature": "has_encoded_chars",
+          "label": "Percent-encoded characters in URL",
+          "input_value": 3.211290121078491,
+          "reconstructed_value": 3.236374855041504,
+          "reconstruction_error": 0.0006292438779951226,
+          "error_share": 0.2664027546606552,
+          "raw_value": 1,
+          "typical_value": 0.08839869281045752,
+          "typical_std": 0.2838738521242488,
+          "z_score": 3.211290121078491,
+          "direction": "higher",
+          "description": "Percent-encoded characters in URL is present (seen in 8.8% of normal requests)"
+        },
+        {
+          "feature": "path_length",
+          "label": "Path length",
+          "input_value": -0.33664217591285706,
+          "reconstructed_value": -0.31525346636772156,
+          "reconstruction_error": 0.00045747689600617036,
+          "error_share": 0.19368182917878868,
+          "raw_value": 27,
+          "typical_value": 28.414281045751633,
+          "typical_std": 4.201140364884007,
+          "z_score": -0.33664217591285706,
+          "direction": "lower",
+          "description": "Path length is 27 chars, typical is 28.4 chars ± 4.2 chars (-0.3σ); unusual in combination with the other features"
+        },
+        {
+          "feature": "body_length",
+          "label": "Request body length",
+          "input_value": -0.343636155128479,
+          "reconstructed_value": -0.3325333893299103,
+          "reconstruction_error": 0.00012327140837786743,
+          "error_share": 0.05218937189726143,
+          "raw_value": 0,
+          "typical_value": 20.207287581699347,
+          "typical_std": 58.80430994799429,
+          "z_score": -0.343636155128479,
+          "direction": "lower",
+          "description": "Request body length is 0 chars, typical is 20.2 chars ± 58.8 chars (-0.3σ); unusual in combination with the other features"
+        },
+        {
+          "feature": "method_GET",
+          "label": "HTTP method",
+          "input_value": 1.0,
+          "reconstructed_value": 1.0090311765670776,
+          "reconstruction_error": 8.156215018573221e-05,
+          "error_share": 0.03453093823456086,
+          "raw_value": "GET",
+          "description": "HTTP method is GET"
+        }
+      ]
+    }
+  },
+  {
+    "name": "sql_injection",
+    "request": {
+      "method": "GET",
+      "url": "http://localhost:8080/tienda1/publico/anadir.jsp?id=3'+OR+1%3D1--&nombre=Vino+Rioja&precio=100&cantidad=55&B1=A%F1adir+al+carrito",
+      "user_agent": "Mozilla/5.0 (compatible; Konqueror/3.5; Linux) KHTML/3.5.8 (like Gecko)"
+    },
+    "response": {
+      "anomaly_score": 0.011877193115651608,
+      "threshold": 0.02371569164097309,
+      "is_anomaly": true,
+      "triggered_rules": [
+        "suspicious_payload"
+      ],
+      "score_ratio": 0.5008158014304603,
+      "severity": "high",
+      "summary": "SQL injection: always-true condition in URL: r.jsp?id=3' OR 1=1--&nombre=Vi",
+      "reasons": [
+        {
+          "rule": "suspicious_payload",
+          "signature": "sql_tautology",
+          "category": "sql_injection",
+          "field": "url",
+          "evidence": "r.jsp?id=3' OR 1=1--&nombre=Vi",
+          "description": "SQL injection: always-true condition"
+        }
+      ],
+      "top_features": [
+        {
+          "feature": "special_char_ratio",
+          "label": "Share of special characters in URL",
+          "input_value": 3.3231756687164307,
+          "reconstructed_value": 3.0453929901123047,
+          "reconstruction_error": 0.07716321653248315,
+          "error_share": 0.4997504074442445,
+          "raw_value": 0.16666666666666666,
+          "typical_value": 0.021474013780841253,
+          "typical_std": 0.04369093461150497,
+          "z_score": 3.3231756687164307,
+          "direction": "higher",
+          "description": "Share of special characters in URL is 16.7%, typical is 2.1% ± 4.4% (+3.3σ)"
+        },
+        {
+          "feature": "query_param_count",
+          "label": "Number of query parameters",
+          "input_value": 1.2369967699050903,
+          "reconstructed_value": 1.414716362953186,
+          "reconstruction_error": 0.03158425375318075,
+          "error_share": 0.20455658008151908,
+          "raw_value": 5,
+          "typical_value": 1.1573202614379086,
+          "typical_std": 3.1064589063189456,
+          "z_score": 1.2369967699050903,
+          "direction": "higher",
+          "description": "Number of query parameters is 5, typical is 1.16 ± 3.11 (+1.2σ); unusual in combination with the other features"
+        },
+        {
+          "feature": "has_encoded_chars",
+          "label": "Percent-encoded characters in URL",
+          "input_value": 3.211290121078491,
+          "reconstructed_value": 3.3238329887390137,
+          "reconstruction_error": 0.012665897061253872,
+          "error_share": 0.08203114775994144,
+          "raw_value": 1,
+          "typical_value": 0.08839869281045752,
+          "typical_std": 0.2838738521242488,
+          "z_score": 3.211290121078491,
+          "direction": "higher",
+          "description": "Percent-encoded characters in URL is present (seen in 8.8% of normal requests)"
+        },
+        {
+          "feature": "path_depth",
+          "label": "Path depth",
+          "input_value": -0.16606543958187103,
+          "reconstructed_value": -0.2715059816837311,
+          "reconstruction_error": 0.011117707918734121,
+          "error_share": 0.07200424388600436,
+          "raw_value": 3,
+          "typical_value": 3.0545751633986926,
+          "typical_std": 0.32863649173040527,
+          "z_score": -0.16606543958187103,
+          "direction": "lower",
+          "description": "Path depth is 3, typical is 3.05 ± 0.329 (-0.2σ); unusual in combination with the other features"
+        },
+        {
+          "feature": "url_length",
+          "label": "URL length",
+          "input_value": 1.0035769939422607,
+          "reconstructed_value": 0.9105677008628845,
+          "reconstruction_error": 0.008650728599125301,
+          "error_share": 0.056026761666713595,
+          "raw_value": 108,
+          "typical_value": 48.76428104575163,
+          "typical_std": 59.024587421131024,
+          "z_score": 1.0035769939422607,
+          "direction": "higher",
+          "description": "URL length is 108 chars, typical is 48.8 chars ± 59 chars (+1.0σ); unusual in combination with the other features"
+        }
+      ]
+    }
+  },
+  {
+    "name": "oversized_value",
+    "request": {
+      "method": "GET",
+      "url": "http://localhost:8080/tienda1/publico/anadir.jsp?id=3&nombre=Vino+Rioja&precio=100&cantidad=999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999999&B1=A%F1adir+al+carrito",
+      "user_agent": "Mozilla/5.0 (compatible; Konqueror/3.5; Linux) KHTML/3.5.8 (like Gecko)"
+    },
+    "response": {
+      "anomaly_score": 5.621669292449951,
+      "threshold": 0.02371569164097309,
+      "is_anomaly": true,
+      "triggered_rules": [],
+      "score_ratio": 237.04429023429844,
+      "severity": "medium",
+      "summary": "Unusual request shape. URL length is 694 chars, typical is 48.8 chars ± 59 chars (+10.9σ)",
+      "reasons": [],
+      "top_features": [
+        {
+          "feature": "url_length",
+          "label": "URL length",
+          "input_value": 10.93164348602295,
+          "reconstructed_value": 6.3116326332092285,
+          "reconstruction_error": 21.344500280116563,
+          "error_share": 0.2920635337161681,
+          "raw_value": 694,
+          "typical_value": 48.76428104575163,
+          "typical_std": 59.024587421131024,
+          "z_score": 10.93164348602295,
+          "direction": "higher",
+          "description": "URL length is 694 chars, typical is 48.8 chars ± 59 chars (+10.9σ)"
+        },
+        {
+          "feature": "query_length",
+          "label": "Query-string length",
+          "input_value": 11.017436981201172,
+          "reconstructed_value": 6.56312370300293,
+          "reconstruction_error": 19.84090678033317,
+          "error_share": 0.2714893893203641,
+          "raw_value": 666,
+          "typical_value": 20.129150326797387,
+          "typical_std": 58.62260421903693,
+          "z_score": 11.017436981201172,
+          "direction": "higher",
+          "description": "Query-string length is 666 chars, typical is 20.1 chars ± 58.6 chars (+11.0σ)"
+        },
+        {
+          "feature": "query_param_count",
+          "label": "Number of query parameters",
+          "input_value": 1.2369967699050903,
+          "reconstructed_value": 5.538258075714111,
+          "reconstruction_error": 18.500848820849924,
+          "error_share": 0.25315295333475585,
+          "raw_value": 5,
+          "typical_value": 1.1573202614379086,
+          "typical_std": 3.1064589063189456,
+          "z_score": 1.2369967699050903,
+          "direction": "higher",
+          "description": "Number of query parameters is 5, typical is 1.16 ± 3.11 (+1.2σ); unusual in combination with the other features"
+        },
+        {
+          "feature": "special_char_ratio",
+          "label": "Share of special characters in URL",
+          "input_value": -0.0297797042876482,
+          "reconstructed_value": 2.7677056789398193,
+          "reconstruction_error": 7.825924469371331,
+          "error_share": 0.10708459439781913,
+          "raw_value": 0.020172910662824207,
+          "typical_value": 0.021474013780841253,
+          "typical_std": 0.04369093461150497,
+          "z_score": -0.0297797042876482,
+          "direction": "lower",
+          "description": "Share of special characters in URL is 2.0%, typical is 2.1% ± 4.4% (-0.0σ); unusual in combination with the other features"
+        },
+        {
+          "feature": "body_special_char_ratio",
+          "label": "Share of special characters in body",
+          "input_value": -0.4953271150588989,
+          "reconstructed_value": -1.9619789123535156,
+          "reconstruction_error": 2.1510674945075294,
+          "error_share": 0.02943373541019824,
+          "raw_value": 0.0,
+          "typical_value": 0.03302893795163442,
+          "typical_std": 0.06668106242168016,
+          "z_score": -0.4953271150588989,
+          "direction": "lower",
+          "description": "Share of special characters in body is 0.0%, typical is 3.3% ± 6.7% (-0.5σ); unusual in combination with the other features"
+        }
+      ]
+    }
+  },
+  {
+    "name": "scanner_user_agent",
+    "request": {
+      "method": "GET",
+      "url": "http://localhost:8080/tienda1/publico/anadir.jsp?id=3&nombre=Vino+Rioja&precio=100&cantidad=55&B1=A%F1adir+al+carrito",
+      "user_agent": "sqlmap/1.7.2#stable (https://sqlmap.org)"
+    },
+    "response": {
+      "anomaly_score": 0.1640509068965912,
+      "threshold": 0.02371569164097309,
+      "is_anomaly": true,
+      "triggered_rules": [
+        "suspicious_payload"
+      ],
+      "score_ratio": 6.9173992215839055,
+      "severity": "high",
+      "summary": "Known security-scanner User-Agent: sqlmap/1.7.2#stabl",
+      "reasons": [
+        {
+          "rule": "suspicious_payload",
+          "signature": "scanner_user_agent",
+          "category": "scanner",
+          "field": "user_agent",
+          "evidence": "sqlmap/1.7.2#stabl",
+          "description": "Known security-scanner User-Agent"
+        }
+      ],
+      "top_features": [
+        {
+          "feature": "user_agent_category_browser",
+          "label": "User-Agent type",
+          "input_value": 0.0,
+          "reconstructed_value": 0.9078736305236816,
+          "reconstruction_error": 0.8242345290002504,
+          "error_share": 0.38648160778062873,
+          "raw_value": "other",
+          "description": "User-Agent type is 'other', not browser"
+        },
+        {
+          "feature": "has_encoded_chars",
+          "label": "Percent-encoded characters in URL",
+          "input_value": 3.211290121078491,
+          "reconstructed_value": 2.3222227096557617,
+          "reconstruction_error": 0.790440862053913,
+          "error_share": 0.37063583782718434,
+          "raw_value": 1,
+          "typical_value": 0.08839869281045752,
+          "typical_std": 0.2838738521242488,
+          "z_score": 3.211290121078491,
+          "direction": "higher",
+          "description": "Percent-encoded characters in URL is present (seen in 8.8% of normal requests)"
+        },
+        {
+          "feature": "special_char_ratio",
+          "label": "Share of special characters in URL",
+          "input_value": 2.846341371536255,
+          "reconstructed_value": 2.224181890487671,
+          "reconstruction_error": 0.38708241985864333,
+          "error_share": 0.18150202485698025,
+          "raw_value": 0.14583333333333334,
+          "typical_value": 0.021474013780841253,
+          "typical_std": 0.04369093461150497,
+          "z_score": 2.846341371536255,
+          "direction": "higher",
+          "description": "Share of special characters in URL is 14.6%, typical is 2.1% ± 4.4% (+2.8σ)"
+        },
+        {
+          "feature": "url_length",
+          "label": "URL length",
+          "input_value": 0.8002719283103943,
+          "reconstructed_value": 0.9702344536781311,
+          "reconstruction_error": 0.02888726002937858,
+          "error_share": 0.013545167434411056,
+          "raw_value": 96,
+          "typical_value": 48.76428104575163,
+          "typical_std": 59.024587421131024,
+          "z_score": 0.8002719283103943,
+          "direction": "higher",
+          "description": "URL length is 96 chars, typical is 48.8 chars ± 59 chars (+0.8σ); unusual in combination with the other features"
+        },
+        {
+          "feature": "body_special_char_ratio",
+          "label": "Share of special characters in body",
+          "input_value": -0.4953271150588989,
+          "reconstructed_value": -0.32855498790740967,
+          "reconstruction_error": 0.0278129423946325,
+          "error_share": 0.013041422453904881,
+          "raw_value": 0.0,
+          "typical_value": 0.03302893795163442,
+          "typical_std": 0.06668106242168016,
+          "z_score": -0.4953271150588989,
+          "direction": "lower",
+          "description": "Share of special characters in body is 0.0%, typical is 3.3% ± 6.7% (-0.5σ); unusual in combination with the other features"
+        }
+      ]
+    }
+  }
+]
