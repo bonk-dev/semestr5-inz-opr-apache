@@ -9,6 +9,13 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
 builder.Services.AddMockDetection();
+builder.Services.AddCors(b =>
+    {
+        b.AddDefaultPolicy(p =>
+        {
+            p.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173");
+        });
+    });
 
 var app = builder.Build();
 
@@ -22,6 +29,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors();
 app.MapControllers();
 
 await app.RunAsync();
