@@ -11,6 +11,13 @@ var builder = WebApplication.CreateBuilder(args);
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddControllers();
+builder.Services.AddCors(b =>
+    {
+        b.AddDefaultPolicy(p =>
+        {
+            p.AllowAnyHeader().AllowAnyMethod().WithOrigins("http://localhost:5173");
+        });
+    });
 builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options =>
 {
     options.Cookie.Name = "schiza.session";
@@ -37,6 +44,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors();
 app.UseAuthentication();
 app.UseAuthorization();
 app.MapGet("/", () => Results.Ok(new { service = "Schiza API", status = "ok" }));
