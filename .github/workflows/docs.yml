@@ -1,0 +1,30 @@
+name: Build documentation
+on:
+  push:
+    branches: [main]
+    paths: ['docs/**', 'prezentacje/media/**']
+  pull_request:
+    paths: ['docs/**', 'prezentacje/media/**']
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: xu-cheng/latex-action@v3
+        with:
+          working_directory: docs
+          root_file: DokumentacjaProjektowa.tex
+
+      - name: Rename PDF with timestamp
+        run: |
+          TS=$(TZ=Europe/Warsaw date +%Y-%m-%d_%H-%M)
+          echo "TS=$TS" >> "$GITHUB_ENV"
+          mv docs/DokumentacjaProjektowa.pdf "docs/DokumentacjaProjektowa_${TS}.pdf"
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: DokumentacjaProjektowa_${{ env.TS }}
+          path: docs/DokumentacjaProjektowa_${{ env.TS }}.pdf
