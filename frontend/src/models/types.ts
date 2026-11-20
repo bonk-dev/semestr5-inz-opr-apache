@@ -7,6 +7,13 @@ export interface RequestLine{
     protocol: string| null;
 }
 
+export interface ResponseInfo {
+    status: number;
+    bytesSent: number;
+    bodyBytes: number;
+    duration: string;
+}
+
 export interface RequestData {
     clientIp: string;
     timestamp: string;
@@ -16,20 +23,25 @@ export interface RequestData {
     host: string | null;
     tlsProtocol: string | null;
     uniqueId: string | null;
-    response: unknown | null;
+    response: ResponseInfo | null;
 }
 
-export interface Verdict {
-    isSafe: boolean;
+export interface Classification {
+    verdict: string;
     score: number;
     reason: string;
-    ruleId: string;
+    ruleId: number | null;
 }
 
 export interface SecurityEvent {
-    id: string;
+    id: number;
     classifiedAt: string;
     source: string;
     request: RequestData;
-    verdict?: Verdict;
+    classification: Classification;
+}
+
+export interface EventsResponse {
+    items: SecurityEvent[];
+    total: number;
 }
