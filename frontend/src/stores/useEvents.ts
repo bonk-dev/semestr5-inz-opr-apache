@@ -16,6 +16,7 @@ function getErrorMessage(e: unknown){
 export function useEvents() {
     const [page,setPage] = useState(0);
     const [events, setEvents] = useState<SecurityEvent[]>([]);
+    const [total, setTotal] = useState(0);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState<string | null>(null);
     const [reloadKey,setReloadKey] = useState(0);
@@ -28,7 +29,8 @@ export function useEvents() {
 
             try{
                 const data = await fetchEvents(page,controller.signal);
-                setEvents(data);
+                setEvents(data.items);
+                setTotal(data.total);
             } catch(e){
                 if (axios.isCancel(e)) return;
                 setError(getErrorMessage(e));
@@ -50,11 +52,13 @@ export function useEvents() {
 
     return {
         events,
+        total,
         page,
+        totalPages: Math.ceil(total / PAGE_SIZE),
         loading,
         error,
-        hasPrev: page>0,
-        hasNext: events.length === PAGE_SIZE,
+        hasPrev: page > 0,
+        hasNext: (page + 1) * PAGE_SIZE < total,
         nextPage,
         prevPage,
         retry,
