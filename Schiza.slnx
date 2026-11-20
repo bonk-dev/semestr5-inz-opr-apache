@@ -1,6 +1,16 @@
 <Solution>
   <Folder Name="/api/">
     <Project Path="api/Schiza.Api/Schiza.Api.csproj" />
+    <Project Path="api/Schiza.Api.Tests/Schiza.Api.Tests.csproj" />
+  </Folder>
+  <Folder Name="/application/">
+    <Project Path="application/Schiza.Application/Schiza.Application.csproj" />
+  </Folder>
+  <Folder Name="/domain/">
+    <Project Path="domain/Schiza.Domain/Schiza.Domain.csproj" />
+  </Folder>
+  <Folder Name="/infrastructure/">
+    <Project Path="infrastructure/Schiza.Infrastructure/Schiza.Infrastructure.csproj" />
   </Folder>
   <Folder Name="/logEngine/">
     <Project Path="logEngine/Schiza.LogEngine/Schiza.LogEngine.csproj" />
