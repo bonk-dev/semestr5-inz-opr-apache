@@ -1,4 +1,4 @@
-import type { SecurityEvent } from "../models/types";
+import type { EventsResponse } from "../models/types";
 import {PAGE_SIZE} from "../constants";
 import { apiClient } from "./apiClient";
 import type { BlockedIp } from "../models/blockips";
@@ -6,8 +6,8 @@ import type { BlockedIp } from "../models/blockips";
 export async function fetchEvents(
     page: number,
     signal?: AbortSignal,
-): Promise<SecurityEvent[]> {
-    const { data } = await apiClient.get<SecurityEvent[] | { items: SecurityEvent[] }>(
+): Promise<EventsResponse> {
+    const { data } = await apiClient.get<EventsResponse>(
         "/events",
         {
             params: {
@@ -18,10 +18,10 @@ export async function fetchEvents(
         }
     );
 
-    return Array.isArray(data) ? data : data.items ?? [];
+    return data;
 }
 
-type RawBlockedIp = string | { ip: string;reason?: string };
+type RawBlockedIp = string | { ip: string; reason?: string };
 
 export async function fetchBlockedIPs(signal?: AbortSignal): Promise<BlockedIp[]> {
     const { data } = await apiClient.get<RawBlockedIp[] | { items: RawBlockedIp[] }>(

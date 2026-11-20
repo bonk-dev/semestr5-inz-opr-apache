@@ -1,65 +1,75 @@
 import type { SecurityEvent } from "../models/types";
-import { dash,formatDate } from "../utils/format";
+import { formatDate, formatDuration, isSafe, verdictLabel } from "../utils/format";
 import { Field } from "./Field";
 
 interface EventCardProps {
-    event: SecurityEvent;
+  event: SecurityEvent;
 }
 
-export function EventCard({event}: EventCardProps){
-    const {request: req, verdict } = event;
-    const line = req.requestLine;
-    const status = verdict ? (verdict.isSafe ? "safe" : "unsafe") : "";
-    return (
-        <article className={`event ${status}`}>
-            <header>
-                <strong>{verdict ?( verdict.isSafe ? "Bezpieczny" : "Niebezpieczny") : "Brak werdyktu"}</strong>
-                {verdict && <span>wynik: {verdict.score}</span>}
-                <span className="id">{event.id}</span>
-            </header>
+export function EventCard({ event }: EventCardProps) {
+  const { request: req, classification: c } = event;
+  const line = req.requestLine;
+  const res = req.response;
 
-            <div className="columns">
-                <section>
-                    <h3>Zdarzenia</h3>
-                    <dl>
-                        <Field label="ID" value={event.id}/>
-                        <Field label="Data klasyfikacji" value={formatDate(event.classifiedAt)}/>
-                        <Field label="Źródło" value={event.source}/>
-                    </dl>
-                </section>
-                {verdict && (
-                    <section>
-                        <h3>Werdykt</h3>
-                        <dl>
-                        <Field label="Bezpieczny" value={verdict.isSafe ? "tak" : "nie"} />
-                        <Field label="Wynik" value={verdict.score} />
-                        <Field label="Powód" value={verdict.reason} />
-                        <Field label="ID reguły" value={verdict.ruleId} />
-                        </dl>
-                    </section>
-                )}
-                <section>
-                    <h3>Żądanie</h3>
-                    <dl>
-                        <Field label="IP klienta" value={req.clientIp}/>
-                        <Field label="Czas żądania" value={formatDate(req.timestamp)}/>
-                        <Field label="Linia żądania" value={<code>{line.raw}</code>}/>
-                        <Field label="Rodzaj" value={line.kind}/>
-                        <Field label="Metoda" value={dash(line.method)}/>
-                        <Field label="Ścieżka" value={dash(line.path)}/>
-                        <Field label="Query" value={dash(line.query)}/>
-                        <Field label="Protokół" value={dash(line.protocol)}/>
-                        <Field label="Referer" value={dash(req.referer)}/>
-                        <Field label="User-Agent" value={dash(req.userAgent)}/>
-                        <Field label="Host" value={dash(req.host)}/>
-                        <Field label="Protokół TLS" value={dash(req.tlsProtocol)}/>
-                        <Field label="Unique ID" value={dash(req.uniqueId)}/>
-                        <Field label="Odpowiedź" value={req.response == null ? null : (
-                            <pre>{JSON.stringify(req.response,null,2)}</pre>
-                        )}/>
-                    </dl>
-                </section>
-            </div>
-        </article>
-    );
+  return (
+    <article className={`event ${isSafe(c) ? "safe" : "unsafe"}`}>
+      <header>
+        <strong>{verdictLabel(c)}</strong>
+        <span>wynik: {c.score}</span>
+        <span className="id">#{event.id}</span>
+      </header>
+
+      <div className="columns">
+        <section>
+          <h3>Zdarzenie</h3>
+          <dl>
+            <Field label="ID" value={event.id} />
+            <Field label="Data klasyfikacji" value={formatDate(event.classifiedAt)} />
+            <Field label="Źródło" value={event.source} />
+          </dl>
+        </section>
+
+        <section>
+          <h3>Werdykt</h3>
+          <dl>
+            <Field label="Werdykt" value={verdictLabel(c)} />
+            <Field label="Wynik" value={c.score} />
+            <Field label="Powód" value={c.reason} />
+            <Field label="ID reguły" value={c.ruleId} />
+          </dl>
+        </section>
+
+        <section>
+          <h3>Żądanie</h3>
+          <dl>
+            <Field label="IP klienta" value={req.clientIp} />
+            <Field label="Czas żądania" value={formatDate(req.timestamp)} />
+            <Field label="Linia żądania" value={<code>{line.raw}</code>} />
+            <Field label="Rodzaj" value={line.kind} />
+            <Field label="Metoda" value={line.method} />
+            <Field label="Ścieżka" value={line.path} />
+            <Field label="Query" value={line.query} />
+            <Field label="Protokół" value={line.protocol} />
+            <Field label="Referer" value={req.referer} />
+            <Field label="User-Agent" value={req.userAgent} />
+            <Field label="Host" value={req.host} />
+            <Field label="Protokół TLS" value={req.tlsProtocol} />
+            <Field label="Unique ID" value={req.uniqueId} />
+          </dl>
+        </section>
+
+        {res && (
+          <section>
+            <h3>Odpowiedź serwera</h3>
+            <dl>
+              <Field label="Status" value={res.status} />
+              <Field label="Wysłane bajty" value={res.bytesSent} />
+              <Field label="Rozmiar treści" value={res.bodyBytes} />
+              <Field label="Czas odpowiedzi" value={formatDuration(res.duration)} />
+            </dl>
+          </section>
+        )}
+      </div>
+    </article>
+  );
 }

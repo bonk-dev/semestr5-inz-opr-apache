@@ -1,6 +1,6 @@
 import { Fragment, useState } from "react";
 import type { SecurityEvent } from "../models/types";
-import { formatDate } from "../utils/format";
+import { formatDate,isSafe, verdictLabel } from "../utils/format";
 import { EventCard } from "./EventCard";
 
 interface EventsTableProps {
@@ -8,8 +8,8 @@ interface EventsTableProps {
 }
 
 export function EventsTable({events}: EventsTableProps){
-    const [expandedId, setExpandedId] = useState<string | null>(null);
-    const toggle = (id: string) => setExpandedId((cur) => (cur === id ? null : id));
+    const [expandedId, setExpandedId] = useState<number | null>(null);
+    const toggle = (id: number) => setExpandedId((cur) => (cur === id ? null : id));
 
     return (
         <div className="table-wrapper">
@@ -17,6 +17,7 @@ export function EventsTable({events}: EventsTableProps){
                 <thead>
                     <tr>
                         <th>Data klasyfikacji</th>
+                        <th>Czas żądania</th>
                         <th>Ip klienta</th>
                         <th>Żądanie</th>
                         <th>Źródło</th>
@@ -28,18 +29,20 @@ export function EventsTable({events}: EventsTableProps){
                 <tbody>
                     {events.map((e) => {
                         const open = expandedId === e.id;
-                        const isSafe = e.verdict?.isSafe;
                         return (
                             <Fragment key={e.id}>
-                                <tr className={isSafe === undefined ? "" : isSafe ? "safe" : "dangerous"}>
+                                <tr className={isSafe(e.classification) ? "safe" : "unsafe"}>
                                     <td>{formatDate(e.classifiedAt)}</td>
-                                    <td>{e.request?.clientIp}</td>
+                                    <td>{formatDate(e.request.timestamp)}</td>
+                                    <td className="cell-ip">{e.request?.clientIp}</td>
                                     <td>
-                                        <code>{e.request?.requestLine?.raw}</code>
+                                        <code>{e.request.requestLine.raw}</code>
                                     </td>
                                     <td>{e.source}</td>
-                                    <td>{isSafe === undefined ? "-" : isSafe ? "Bezpieczny" : "Niebezpieczny"}</td>
-                                    <td>{e.verdict?.score ?? "-"}</td>
+                                    <td className="cell-verdict">{verdictLabel(e.classification)}</td>
+                                    <td className="cell-score">
+                                        {e.classification.score}
+                                    </td>
                                     <td>
                                         <button onClick={() => toggle(e.id)} aria-expanded={open}>
                                             {open ? "Ukryj" : "Szczegóły"}
@@ -48,7 +51,7 @@ export function EventsTable({events}: EventsTableProps){
                                 </tr>
                                 {open && (
                                     <tr className="details">
-                                        <td colSpan={7}>
+                                        <td colSpan={8}>
                                             <EventCard event={e}/>
                                         </td>
                                     </tr>

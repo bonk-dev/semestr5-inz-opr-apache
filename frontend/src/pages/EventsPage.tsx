@@ -1,13 +1,14 @@
 import { EventsTable } from "../components/EventTable";
 import { Pagination } from "../components/Pagination";
-import { useEvents } from "../stores/useEvants";
+import { useEvents } from "../stores/useEvents";
 
 export default function EventsPage() {
-    const { events,page,loading, error, hasPrev,hasNext, nextPage,prevPage,retry } = useEvents();
+    const { events,page,totalPages,loading, error, hasPrev,hasNext, nextPage,prevPage,retry } = useEvents();
 
     const pager = (
         <Pagination
           page={page}
+          totalPages={totalPages}
           hasPrev={hasPrev}
           hasNext={hasNext}
           disabled={loading}
