@@ -1,20 +1,23 @@
-using System.Text.Json;
-
 using Schiza.Domain;
+using Schiza.Application.Legacy;
 using Schiza.Shared.Requests;
 
 namespace Schiza.Application;
 
-public interface IAnomalyDetector
+public interface IAnomalyDetector : IClassifier
 {
-    Task<JsonDocument> PredictAsync(ApacheRequest request, CancellationToken cancellationToken);
+}
+
+public interface IClassifier
+{
+    Task<Legacy.ClassificationResult> ClassifyAsync(ApacheRequest request, CancellationToken cancellationToken);
 }
 
 public interface IFlaggedEventRepository
 {
     Task<FlaggedEvent?> GetAsync(long id, CancellationToken cancellationToken);
-    Task<(IReadOnlyList<FlaggedEvent> Items, int Total)> QueryAsync(int page, int pageSize, string? severity, CancellationToken cancellationToken);
-    Task<FlaggedEvent?> AddIfNewAsync(ApacheRequest request, string rawLogLine, JsonDocument detection, CancellationToken cancellationToken);
+    Task<(IReadOnlyList<FlaggedEvent> Items, int Total)> QueryAsync(EventQuery query, CancellationToken cancellationToken);
+    Task<FlaggedEvent?> AddIfNewAsync(ApacheRequest request, string rawLogLine, ClassificationResult classification, EventSource source, CancellationToken cancellationToken);
     Task<int> DeleteOlderThanAsync(DateTimeOffset cutoffUtc, CancellationToken cancellationToken);
 }
 

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Schiza.Shared\Schiza.Shared.csproj" />
+    <ProjectReference Include="..\..\shared\Schiza.Shared\Schiza.Shared.csproj" />
   </ItemGroup>
 
 </Project>

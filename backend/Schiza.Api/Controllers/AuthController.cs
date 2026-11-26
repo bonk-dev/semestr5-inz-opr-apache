@@ -1,11 +1,8 @@
 using System.Security.Claims;
-
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
-
 using Schiza.Application;
-
 using ApplicationAuthenticationService = Schiza.Application.IAuthenticationService;
 
 namespace Schiza.Api.Controllers;

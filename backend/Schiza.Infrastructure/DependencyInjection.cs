@@ -1,6 +1,5 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-
 using Schiza.Application;
 using Schiza.Application.Legacy;
 using Schiza.LogEngine.Parsing;
@@ -17,9 +16,10 @@ public static class DependencyInjection
         services.AddSingleton<LogEventProcessor>();
         services.AddSingleton<FlaggedEventQueries>();
         services.AddSingleton<IAuthenticationService, ConfigurationAuthenticationService>();
-        services.AddSingleton<IRuleStore, InMemoryRuleStore>();
-        services.AddSingleton<IEventStore, InMemoryEventStore>();
-        services.AddSingleton<IRequestClassifier, StaticRuleClassifier>();
+        services.AddSingleton<SqliteRuleStore>();
+        services.AddSingleton<IRuleStore>(services => services.GetRequiredService<SqliteRuleStore>());
+        services.AddSingleton<StaticRuleClassifier>();
+        services.AddSingleton<IRequestClassifier, CombinedRequestClassifier>();
         services.AddHostedService<ApacheLogWorker>();
         services.AddHostedService<FlaggedEventRetentionWorker>();
         services.AddHttpClient<IAnomalyDetector, PythonAnomalyDetector>(client =>

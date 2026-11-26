@@ -10,4 +10,5 @@ public sealed record FlaggedEvent(
     string Severity,
     string Method,
     string Url,
-    string ClientIp);
+    string ClientIp,
+    string Source);

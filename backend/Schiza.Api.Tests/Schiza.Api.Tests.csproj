@@ -12,7 +12,7 @@
   <ItemGroup>
     <Using Include="Xunit" />
     <ProjectReference Include="..\Schiza.Api\Schiza.Api.csproj" />
-    <ProjectReference Include="..\Schiza.Application\Schiza.Application.csproj" />
-    <ProjectReference Include="..\Schiza.Infrastructure\Schiza.Infrastructure.csproj" />
+    <ProjectReference Include="..\..\application\Schiza.Application\Schiza.Application.csproj" />
+    <ProjectReference Include="..\..\infrastructure\Schiza.Infrastructure\Schiza.Infrastructure.csproj" />
   </ItemGroup>
 </Project>

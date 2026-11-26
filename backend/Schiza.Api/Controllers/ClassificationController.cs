@@ -1,15 +1,15 @@
-using System.Globalization;
-
 using Microsoft.AspNetCore.Mvc;
 
 using Schiza.Application.Legacy;
+using Schiza.Application;
 using Schiza.Shared.Requests;
+using System.Text.Json;
 
 namespace Schiza.Api.Controllers;
 
 [ApiController]
 [Route("classify")]
-public sealed class ClassificationController(IRequestClassifier classifier, IEventStore events) : ControllerBase
+public sealed class ClassificationController(IRequestClassifier classifier, IFlaggedEventRepository events) : ControllerBase
 {
     /// <summary>
     /// Score of the result, so mod_schiza can log it without parsing JSON.
@@ -42,13 +42,14 @@ public sealed class ClassificationController(IRequestClassifier classifier, IEve
             return StatusCode(StatusCodes.Status500InternalServerError);
         }
 
-        ClassificationResult result = classifier.Classify(request);
+        ClassificationResult result = await classifier.ClassifyAsync(request, cancellationToken);
         if (result.Verdict == Verdict.Unsafe)
         {
-            events.Add(request, result);
+            string rawRequest = JsonSerializer.Serialize(request, JsonSerializerOptions.Web);
+            await events.AddIfNewAsync(request, rawRequest, result, EventSource.BlockingModule, cancellationToken);
         }
 
-        Response.Headers[ScoreHeader] = result.Score.ToString("0.00", CultureInfo.InvariantCulture);
+        Response.Headers[ScoreHeader] = result.Score.ToString("0.00", System.Globalization.CultureInfo.InvariantCulture);
         return StatusCode(result.Verdict == Verdict.Unsafe ? StatusCodes.Status403Forbidden : StatusCodes.Status200OK, result);
     }
 }

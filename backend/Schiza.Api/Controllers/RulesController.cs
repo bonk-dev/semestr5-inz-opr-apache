@@ -1,5 +1,5 @@
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 using Schiza.Application.Legacy;
 using Schiza.Infrastructure;
@@ -30,7 +30,7 @@ public sealed class RulesController(IRuleStore rules) : ControllerBase
     [ProducesResponseType<ValidationProblemDetails>(StatusCodes.Status400BadRequest)]
     public ActionResult<StaticRule> Create(CreateRuleRequest request)
     {
-        if (!RuleMatcher.TryValidatePattern(request.MatchType, request.Pattern, out string? error))
+        if (!StaticRuleMatcher.TryValidatePattern(request.MatchType, request.Pattern, out string? error))
         {
             ModelState.AddModelError(nameof(request.Pattern), $"Invalid regular expression: {error}");
             return ValidationProblem(ModelState);
