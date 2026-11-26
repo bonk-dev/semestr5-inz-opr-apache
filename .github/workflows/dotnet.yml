@@ -4,12 +4,7 @@ on:
   push:
     branches: [main]
     paths:
-      - "api/**"
-      - "application/**"
-      - "domain/**"
-      - "infrastructure/**"
-      - "logEngine/**"
-      - "shared/**"
+      - "backend/**"
       - "tools/**"
       - "*.slnx"
       - "*.props"
@@ -48,12 +43,7 @@ jobs:
         with:
           filters: |
             dotnet:
-              - "api/**"
-              - "application/**"
-              - "domain/**"
-              - "infrastructure/**"
-              - "logEngine/**"
-              - "shared/**"
+              - "backend/**"
               - "tools/**"
               - "*.slnx"
               - "*.props"

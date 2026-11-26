@@ -2,9 +2,9 @@ name: Build documentation
 on:
   push:
     branches: [main]
-    paths: ['docs/**', 'prezentacje/media/**']
+    paths: ['docs/**']
   pull_request:
-    paths: ['docs/**', 'prezentacje/media/**']
+    paths: ['docs/**']
   workflow_dispatch:
 
 jobs:

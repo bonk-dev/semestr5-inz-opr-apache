@@ -55,7 +55,7 @@
 \clearpage
 \begin{figure}[h]
     \centering
-    {\includegraphics[width=0.5\linewidth]{../prezentacje/media/logo.jpg}}{\vspace{2cm}}
+    {\includegraphics[width=0.5\linewidth]{prezentacje/media/logo.jpg}}{\vspace{2cm}}
 \end{figure}
 
 \hspace{3cm}
@@ -142,7 +142,7 @@ podziałem zespołu.
         komponentów współdzielonych w \code{/shared} oraz mocków
         wykorzystywanych do testowania frontendu i parsera. \\
         \authorB & Autor modułu detekcji opartego na Pythonie
-        (\code{/Deep Learning Detection Module}) oraz backendu
+        (\code{/detector}) oraz backendu
         zaimplementowanego w C\#. \\
         \authorC & Autor frontendowej części aplikacji. \\
         \bottomrule
@@ -158,16 +158,16 @@ Rozwiązanie .NET jest zapisane w pliku \code{Schiza.slnx} i składa się z
 następujących projektów:
 
 \begin{itemize}
-    \item \code{domain/Schiza.Domain} -- encje domenowe, w szczególności
+    \item \code{backend/Schiza.Domain} -- encje domenowe, w szczególności
     \code{FlaggedEvent},
-    \item \code{application/Schiza.Application} -- porty, przypadki użycia
+    \item \code{backend/Schiza.Application} -- porty, przypadki użycia
     i logika aplikacyjna niezależna od infrastruktury,
-    \item \code{infrastructure/Schiza.Infrastructure} -- SQLite, worker logów,
+    \item \code{backend/Schiza.Infrastructure} -- SQLite, worker logów,
     klient HTTP detektora oraz implementacje infrastrukturalne,
-    \item \code{api/Schiza.Api} -- aplikacja ASP.NET Core, kontrolery,
+    \item \code{backend/Schiza.Api} -- aplikacja ASP.NET Core, kontrolery,
     uwierzytelnianie i rejestracja zależności,
-    \item \code{shared/Schiza.Shared} -- wspólne modele żądań i konwertery JSON,
-    \item \code{logEngine/Schiza.LogEngine} -- niezależny parser logów Apache
+    \item \code{backend/Schiza.Shared} -- wspólne modele żądań i konwertery JSON,
+    \item \code{backend/Schiza.LogEngine} -- niezależny parser logów Apache
     i parser audit logów ModSecurity.
 \end{itemize}
 
@@ -470,7 +470,7 @@ podczas pracy deweloperskiej.
     \item Detektor może działać jako osobny proces FastAPI na tym samym hoście
     albo jako usługa dostępna pod adresem skonfigurowanym w backendzie.
     \item Model detekcji wymaga obecności plików modelu w katalogu
-    \code{Deep Learning Detection Module/models}.
+    \code{detector/models}.
 \end{itemize}
 
 \section{Uruchomienie i wdrożenie}

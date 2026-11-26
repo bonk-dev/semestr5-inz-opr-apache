@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Runs Apache with mod_schiza in the foreground, with the access and error log in this terminal.
 #
-#   apacheModule/demo/run-apache.sh [port]        (default 8080, Ctrl+C stops it)
+#   apache-module/demo/run-apache.sh [port]        (default 8080, Ctrl+C stops it)
 #
 # The backend must listen on SCHIZA_BACKEND (default 127.0.0.1:5292, the API http profile).
 # SCHIZA_MODE=monitor only records verdicts instead of blocking.
