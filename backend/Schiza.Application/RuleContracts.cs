@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+
 using Schiza.Shared.Requests;
 
 namespace Schiza.Application.Legacy;

@@ -1,9 +1,10 @@
+using System.Text.Json;
+
 using Microsoft.AspNetCore.Mvc;
 
-using Schiza.Application.Legacy;
 using Schiza.Application;
+using Schiza.Application.Legacy;
 using Schiza.Shared.Requests;
-using System.Text.Json;
 
 namespace Schiza.Api.Controllers;
 

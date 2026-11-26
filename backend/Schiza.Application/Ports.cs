@@ -1,5 +1,5 @@
-using Schiza.Domain;
 using Schiza.Application.Legacy;
+using Schiza.Domain;
 using Schiza.Shared.Requests;
 
 namespace Schiza.Application;

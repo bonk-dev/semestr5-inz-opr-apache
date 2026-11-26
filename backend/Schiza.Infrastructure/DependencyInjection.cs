@@ -1,5 +1,6 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+
 using Schiza.Application;
 using Schiza.Application.Legacy;
 using Schiza.LogEngine.Parsing;

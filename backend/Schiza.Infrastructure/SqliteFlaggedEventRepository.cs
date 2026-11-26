@@ -1,9 +1,11 @@
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
+
+using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
-using Microsoft.Data.Sqlite;
+
 using Schiza.Application;
 using Schiza.Application.Legacy;
 using Schiza.Domain;
@@ -135,7 +137,7 @@ public sealed class SqliteFlaggedEventRepository(IConfiguration configuration, T
         count.Parameters.AddRange(parameters);
         int total = Convert.ToInt32(await count.ExecuteScalarAsync(cancellationToken));
         await using SqliteCommand command = connection.CreateCommand();
-            command.CommandText = $"SELECT Id, EventTimeUtc, DetectedAtUtc, RawLogLine, RequestJson, DetectionJson, Severity, Method, Url, ClientIp, Source FROM FlaggedEvents {filter} ORDER BY EventTimeUtc DESC LIMIT $limit OFFSET $offset";
+        command.CommandText = $"SELECT Id, EventTimeUtc, DetectedAtUtc, RawLogLine, RequestJson, DetectionJson, Severity, Method, Url, ClientIp, Source FROM FlaggedEvents {filter} ORDER BY EventTimeUtc DESC LIMIT $limit OFFSET $offset";
         command.Parameters.AddRange(parameters);
         command.Parameters.AddWithValue("$limit", query.Take);
         command.Parameters.AddWithValue("$offset", offset);

@@ -1,5 +1,6 @@
 using Microsoft.Data.Sqlite;
 using Microsoft.Extensions.Configuration;
+
 using Schiza.Application.Legacy;
 using Schiza.Shared.Requests;
 

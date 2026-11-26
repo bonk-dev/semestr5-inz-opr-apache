@@ -1,8 +1,8 @@
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 
-using Schiza.Application.Legacy;
 using Schiza.Application;
+using Schiza.Application.Legacy;
 
 namespace Schiza.Api.Controllers;
 

@@ -1,5 +1,6 @@
 using System.Net;
 using System.Text.Json.Serialization;
+
 using Schiza.Shared.Requests;
 
 namespace Schiza.Application.Legacy;
