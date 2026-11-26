@@ -3,7 +3,7 @@ name: Build presentation
 on:
   push:
     branches: [docs/st-presentation]
-    paths: ['prezentacje/**']
+    paths: ['docs/prezentacje/**']
 
 jobs:
   build:
@@ -13,16 +13,16 @@ jobs:
 
       - uses: xu-cheng/latex-action@v3
         with:
-          working_directory: prezentacje
+          working_directory: docs/prezentacje
           root_file: pierwsza_prezentacja.tex
 
       - name: Rename PDF with timestamp
         run: |
           TS=$(TZ=Europe/Warsaw date +%Y-%m-%d_%H-%M)
           echo "TS=$TS" >> "$GITHUB_ENV"
-          mv prezentacje/pierwsza_prezentacja.pdf "prezentacje/prezentacja_${TS}.pdf"
+          mv docs/prezentacje/pierwsza_prezentacja.pdf "docs/prezentacje/prezentacja_${TS}.pdf"
 
       - uses: actions/upload-artifact@v4
         with:
           name: prezentacja_${{ env.TS }}
-          path: prezentacje/prezentacja_${{ env.TS }}.pdf
+          path: docs/prezentacje/prezentacja_${{ env.TS }}.pdf
