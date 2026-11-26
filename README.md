@@ -8,14 +8,6 @@ Projekt na inżynierię oprogramownia
 - Bartłomiej Łokaj: @Rotikuningas
 - Paweł Świderski: @Pawel-create
 
-## Quick start: LogEngine
-
-Parser czyta logi w formacie:
-
-```apache
-LogFormat "%h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\" %D \"%{Host}i\" %v:%p %{SSL_PROTOCOL}x %B %{UNIQUE_ID}e" combined_ext
-```
-
 ## Uruchomienie całego przepływu
 
 1. Uruchom gotowy moduł `detector` zgodnie z jego dokumentacją,
@@ -94,6 +86,14 @@ API → Infrastructure (wyłącznie rejestracja DI)
 
 Kontrolery nie wykonują operacji SQLite ani komunikacji z Pythonem. Te operacje
 odbywają się przez interfejsy Application i implementacje Infrastructure.
+
+## Quick start: LogEngine
+
+Parser czyta logi w formacie:
+
+```apache
+LogFormat "%h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\" %D \"%{Host}i\" %v:%p %{SSL_PROTOCOL}x %B %{UNIQUE_ID}e" combined_ext
+```
 
 Dodaj referencję do `backend/Schiza.LogEngine` i parsuj linia po linii:
 
