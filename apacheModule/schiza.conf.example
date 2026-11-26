@@ -1,0 +1,22 @@
+# Example configuration of mod_schiza (blocking mode).
+LoadModule schiza_module modules/mod_schiza.so
+
+# Optional, but they make the classified request match the access.log line
+LoadModule unique_id_module modules/mod_unique_id.so
+
+SchizaEnable On
+
+# Numeric ip:port of the backend over plain HTTP (no DNS names, no TLS)
+SchizaBackend 127.0.0.1:5292
+
+# Total budget for connect + send + answer; after that the request is let through
+SchizaTimeout 100ms
+
+# block: answer 403 to suspicious requests; monitor: only record the verdict
+SchizaMode block
+
+# After 5 failures in a row stop asking the backend for 30 seconds
+SchizaBreaker 5 30s
+
+# Verdict in the access log: allow / block / error / skipped
+# LogFormat "... %{schiza-verdict}n %{schiza-score}n" combined_schiza

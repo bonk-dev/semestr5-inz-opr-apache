@@ -1,0 +1,39 @@
+name: Apache module
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "apacheModule/**"
+      - ".github/workflows/apache-module.yml"
+  pull_request:
+    branches: [main]
+    paths:
+      - "apacheModule/**"
+      - ".github/workflows/apache-module.yml"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    name: Build mod_schiza
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - uses: actions/checkout@v7
+
+      # apache2-bin instead of apache2, so no system service starts on port 80
+      - name: Install Apache and apxs
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends apache2-bin apache2-dev
+
+      - name: Build
+        run: make -C apacheModule
