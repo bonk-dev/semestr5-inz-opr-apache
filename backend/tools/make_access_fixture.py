@@ -5,9 +5,9 @@ The repository is public, so real addresses and names are passed as arguments an
 written into this file or the fixture. The fixture is written only if the leak checks pass.
 
 Example:
-    python3 -I backend/tools/make_access_fixture.py \
+    python3 -I logEngine/tools/make_access_fixture.py \
         --server-ip 203.0.113.50 --server-name www.example.net --reverse-dns host-50.isp.example.net \
-        --output backend/Schiza.LogEngine.Tests/Fixtures/access-sample.txt \
+        --output logEngine/Schiza.LogEngine.Tests/Fixtures/access-sample.txt \
         access.log access.log-20261104
 
 Files are searched in the given order and the first matching line is used for each label.

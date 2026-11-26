@@ -1,23 +1,22 @@
-using System.Text.Json;
-
 using Microsoft.Extensions.Logging;
 
+using Schiza.Application.Legacy;
 using Schiza.Domain;
 using Schiza.Shared.Requests;
 
 namespace Schiza.Application;
 
-public sealed class LogEventProcessor(IAnomalyDetector detector, IFlaggedEventRepository repository, ILogger<LogEventProcessor> logger)
+public sealed class LogEventProcessor(IRequestClassifier classifier, IFlaggedEventRepository repository, ILogger<LogEventProcessor> logger)
 {
     public async Task ProcessAsync(ApacheRequest request, string rawLogLine, CancellationToken cancellationToken)
     {
         try
         {
-            using JsonDocument result = await detector.PredictAsync(request, cancellationToken);
-            if (result.RootElement.TryGetProperty("is_anomaly", out JsonElement flag) && flag.ValueKind == JsonValueKind.True)
-                await repository.AddIfNewAsync(request, rawLogLine, result, cancellationToken);
+            ClassificationResult result = await classifier.ClassifyAsync(request, cancellationToken);
+            if (result.Verdict == Verdict.Unsafe)
+                await repository.AddIfNewAsync(request, rawLogLine, result, EventSource.LogAnalysis, cancellationToken);
         }
-        catch (Exception exception) when (exception is HttpRequestException or JsonException or InvalidOperationException)
+        catch (ClassificationFailedException exception)
         {
             logger.LogError(exception, "Błąd przetwarzania zdarzenia przez moduł detekcji");
         }
@@ -26,6 +25,8 @@ public sealed class LogEventProcessor(IAnomalyDetector detector, IFlaggedEventRe
 
 public sealed class FlaggedEventQueries(IFlaggedEventRepository repository)
 {
-    public Task<(IReadOnlyList<FlaggedEvent> Items, int Total)> ListAsync(int page, int pageSize, string? severity, CancellationToken cancellationToken) => repository.QueryAsync(page, pageSize, severity, cancellationToken);
+    public Task<(IReadOnlyList<FlaggedEvent> Items, int Total)> ListAsync(EventQuery query, CancellationToken cancellationToken) => repository.QueryAsync(query, cancellationToken);
     public Task<FlaggedEvent?> GetAsync(long id, CancellationToken cancellationToken) => repository.GetAsync(id, cancellationToken);
 }
+
+public sealed record FlaggedEventPage(IReadOnlyList<FlaggedEvent> Items, int Total);

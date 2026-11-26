@@ -37,6 +37,10 @@ public sealed class SqliteFlaggedEventRepositoryTests
             Assert.NotNull(loaded);
             Assert.Equal("raw apache line", loaded.RawLogLine);
             Assert.Contains("xai", loaded.DetectionJson, StringComparison.Ordinal);
+            Assert.Equal("LogAnalysis", loaded.Source);
+            SqliteFlaggedEventRepository reopened = new(configuration, TimeProvider.System, NullLogger<SqliteFlaggedEventRepository>.Instance);
+            await reopened.InitializeAsync(CancellationToken.None);
+            Assert.NotNull(await reopened.GetAsync(saved.Id, CancellationToken.None));
         }
         finally
         {
