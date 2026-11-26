@@ -2,7 +2,7 @@
 
 Instrukcja zakłada system Linux oraz uruchamianie poleceń w powłoce bash.
 Wszystkie ścieżki są względne względem katalogu głównego repozytorium,
-czyli katalogu zawierającego `Schiza.slnx`, `api/`, `frontend/` i
+czyli katalogu zawierającego `Schiza.slnx`, `backend/`, `frontend/` i
 `Deep Learning Detection Module/`.
 
 ## 1. Wymagania
@@ -57,7 +57,7 @@ W katalogu głównym repozytorium wykonaj:
 
 ```bash
 mkdir -p ./runtime/apache ./runtime/schiza
-cp ./logEngine/Schiza.LogEngine.Tests/Fixtures/access-sample.txt ./runtime/apache/access.log
+cp ./backend/Schiza.LogEngine.Tests/Fixtures/access-sample.txt ./runtime/apache/access.log
 ```
 
 Przykładowy plik logu służy do testu bez instalowania Apache Web Server.
@@ -67,7 +67,7 @@ Przykładowy plik logu służy do testu bez instalowania Apache Web Server.
 Utwórz lub edytuj plik:
 
 ```text
-./api/Schiza.Api/appsettings.Development.json
+./backend/Schiza.Api/appsettings.Development.json
 ```
 
 Wstaw:
@@ -117,7 +117,7 @@ Otwórz drugie okno terminala i przejdź do katalogu głównego projektu:
 ```bash
 cd .
 dotnet restore ./Schiza.slnx
-dotnet run --project ./api/Schiza.Api/Schiza.Api.csproj --launch-profile http
+dotnet run --project ./backend/Schiza.Api/Schiza.Api.csproj --launch-profile http
 ```
 
 API będzie dostępne pod adresem:
@@ -240,7 +240,7 @@ Z katalogu głównego repozytorium utwórz katalogi runtime i skopiuj przykłado
 
 ```powershell
 New-Item -ItemType Directory -Force ".\runtime\apache", ".\runtime\schiza"
-Copy-Item ".\logEngine\Schiza.LogEngine.Tests\Fixtures\access-sample.txt" ".\runtime\apache\access.log"
+Copy-Item ".\backend\Schiza.LogEngine.Tests\Fixtures\access-sample.txt" ".\runtime\apache\access.log"
 ```
 
 W `api\Schiza.Api\appsettings.Development.json` użyj ścieżek względnych:
@@ -263,7 +263,7 @@ Uruchom backend:
 
 ```powershell
 dotnet restore .\Schiza.slnx
-dotnet run --project .\api\Schiza.Api\Schiza.Api.csproj --launch-profile http
+dotnet run --project .\backend\Schiza.Api\Schiza.Api.csproj --launch-profile http
 ```
 
 ### Frontend i testy
