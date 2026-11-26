@@ -3,7 +3,7 @@
 Instrukcja zakłada system Linux oraz uruchamianie poleceń w powłoce bash.
 Wszystkie ścieżki są względne względem katalogu głównego repozytorium,
 czyli katalogu zawierającego `Schiza.slnx`, `backend/`, `frontend/` i
-`Deep Learning Detection Module/`.
+`detector/`.
 
 ## 1. Wymagania
 
@@ -28,7 +28,7 @@ Otwórz pierwsze okno terminala i z katalogu głównego repozytorium przejdź
 do katalogu modułu:
 
 ```bash
-cd "./Deep Learning Detection Module"
+cd ./detector
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
@@ -216,10 +216,10 @@ na Windows. Wykonuj je w PowerShell z katalogu głównego repozytorium.
 
 ```powershell
 cd .
-python -m venv ".\Deep Learning Detection Module\.venv"
-& ".\Deep Learning Detection Module\.venv\Scripts\Activate.ps1"
-pip install -r ".\Deep Learning Detection Module\requirements.txt"
-python -m uvicorn app.main:app --app-dir ".\Deep Learning Detection Module" --host 127.0.0.1 --port 8000
+python -m venv ".\detector\.venv"
+& ".\detector\.venv\Scripts\Activate.ps1"
+pip install -r ".\detector\requirements.txt"
+python -m uvicorn app.main:app --app-dir ".\detector" --host 127.0.0.1 --port 8000
 ```
 
 Jeżeli PowerShell blokuje aktywację środowiska, ustaw politykę tylko dla bieżącego procesu:

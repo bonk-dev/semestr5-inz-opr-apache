@@ -18,13 +18,13 @@ LogFormat "%h %l %u %t \"%r\" %>s %O \"%{Referer}i\" \"%{User-Agent}i\" %D \"%{H
 
 ## Uruchomienie całego przepływu
 
-1. Uruchom gotowy moduł `Deep Learning Detection Module` zgodnie z jego dokumentacją,
+1. Uruchom gotowy moduł `detector` zgodnie z jego dokumentacją,
    domyślnie pod adresem `http://127.0.0.1:8000`.
 2. Skonfiguruj `backend/Schiza.Api/appsettings.json` lub zmienne środowiskowe:
    `PythonDetection:BaseUrl`, `ApacheLog:Path`, `Storage:DatabasePath`,
    `Admin:Username` oraz `Admin:PasswordHash`. Hasło nie jest przechowywane w repozytorium.
 3. Wszystkie poniższe polecenia wykonuj z katalogu głównego repozytorium
-   (tego, który zawiera `Schiza.slnx`, `backend/`, `frontend/` i `Deep Learning Detection Module/`).
+   (tego, który zawiera `Schiza.slnx`, `backend/`, `frontend/` i `detector/`).
    Przykład ustawienia hasła:
 
    ```bash
@@ -52,9 +52,9 @@ na Windows można użyć PowerShell, wykonując polecenia z katalogu głównego 
 
 ```powershell
 cd .
-python -m venv ".\Deep Learning Detection Module\.venv"
-& ".\Deep Learning Detection Module\.venv\Scripts\Activate.ps1"
-pip install -r ".\Deep Learning Detection Module\requirements.txt"
+python -m venv ".\detector\.venv"
+& ".\detector\.venv\Scripts\Activate.ps1"
+pip install -r ".\detector\requirements.txt"
 New-Item -ItemType Directory -Force ".\runtime\apache", ".\runtime\schiza"
 Copy-Item ".\backend\Schiza.LogEngine.Tests\Fixtures\access-sample.txt" ".\runtime\apache\access.log"
 dotnet restore .\Schiza.slnx
